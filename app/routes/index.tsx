@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import { analyzeMood } from './api/mood-agent';
-import { recommendGame } from './api/recommender-agent';
-import { updateContext } from '../lib/contextStore';
+import { getRecommendations } from './api/recommendationAgent';
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -11,31 +9,17 @@ export const Route = createFileRoute('/')({
 function Home() {
   const [mood, setMood] = useState('');
   const [platforms, setPlatforms] = useState<string[]>([]);
-  const [recommendation, setRecommendation] = useState<any>(null);
+  const [recommendedGames, setRecommendedGames] = useState<any[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // First, analyze the mood to get genres
-    const { genres } = await analyzeMood({
-      data: { mood },
+    const result = await getRecommendations({
+      data: { query: mood },
     });
 
-    // Then, get a game recommendation based on genres and platforms
-    const response = await recommendGame({
-      data: { genres, platforms },
-    });
-
-    // Update MCP context
-    updateContext('test-user', {
-      platforms,
-      history: {
-        moods: [mood],
-        recommendations: [response.recommendation],
-      },
-    });
-
-    setRecommendation(response);
+    // Store the recommended games
+    setRecommendedGames(result.games);
   };
 
   return (
@@ -49,7 +33,7 @@ function Home() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      How are you feeling?
+                      What type of game are you looking for?
                     </label>
                     <input
                       type="text"
@@ -96,12 +80,31 @@ function Home() {
         </div>
       </div>
 
-      {recommendation && (
+      {recommendedGames.length > 0 && (
         <div className="mt-8 max-w-md mx-auto">
           <div className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-4">Recommended Game</h2>
-            <h3 className="text-lg font-semibold">{recommendation.recommendation.title}</h3>
-            <p className="text-gray-600 mt-2">{recommendation.explanation}</p>
+            <h2 className="text-xl font-bold mb-4">Recommended Games</h2>
+            <div className="space-y-4">
+              {recommendedGames.map((game, index) => (
+                <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
+                  <h3 className="text-lg font-semibold">{game.name}</h3>
+                  <div className="mt-2 space-y-1">
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Genre:</span> {game.genre}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Playtime:</span> {game.playtime}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Platforms:</span> {game.platforms.join(', ')}
+                    </p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      <span className="font-medium">Reasoning:</span> {game.reasoning}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
