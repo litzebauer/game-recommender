@@ -15,6 +15,7 @@ export default [
       '.vinxi/**',
       'public/**',
       'app/routeTree.gen.ts',
+      'app/client/**'
     ],
   },
   {

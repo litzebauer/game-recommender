@@ -98,6 +98,22 @@ function Home() {
                     <p className="text-sm text-gray-600">
                       <span className="font-medium">Platforms:</span> {game.platforms.join(', ')}
                     </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Price:</span>{' '}
+                      <a
+                        href={game.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-indigo-600 hover:text-indigo-800 hover:underline"
+                      >
+                        ${game.currentPrice.toFixed(2)}
+                      </a>
+                      {game.discount > 0 && (
+                        <span className="ml-2 text-green-600">
+                          ({game.discount * 100}% off from ${game.originalPrice.toFixed(2)})
+                        </span>
+                      )}
+                    </p>
                     <p className="text-sm text-gray-600 mt-2">
                       <span className="font-medium">Reasoning:</span> {game.reasoning}
                     </p>
