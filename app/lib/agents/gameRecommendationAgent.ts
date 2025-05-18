@@ -6,7 +6,6 @@ import { GoogleSearchTool } from './tools/googleSearch';
 import { IatdSearchTool } from './tools/itadSearch';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { Tool } from '@langchain/core/tools';
-import { ConsoleCallbackHandler } from '@langchain/core/tracers/console';
 
 const createChatPromptTemplate = (
   tools: Tool[],
@@ -93,7 +92,6 @@ export class GameRecommendationAgent {
     const finalState = await this.agent.invoke({
       messages: messages,
       agent_scratchpad: [],
-      callbacks: [new ConsoleCallbackHandler()],
     });
     return this.parser.parse(finalState.messages[finalState.messages.length - 1].content);
   }
