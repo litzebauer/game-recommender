@@ -1,11 +1,13 @@
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { StructuredOutputParser } from '@langchain/core/output_parsers';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
 import { gameRecommendationSchema } from '../schemas/gameRecommendation';
 import { GoogleSearchTool } from './tools/googleSearch';
 import { IatdSearchTool } from './tools/itadSearch';
-import { createReactAgent } from '@langchain/langgraph/prebuilt';
+import { createReactAgent, CreateReactAgentParams } from '@langchain/langgraph/prebuilt';
 import { Tool } from '@langchain/core/tools';
+import { ModelManager } from '../models/modelFactory';
+import { loadModelConfig } from '../config/modelConfig';
 
 const createChatPromptTemplate = (
   tools: Tool[],
@@ -58,7 +60,8 @@ const createChatPromptTemplate = (
 };
 
 export class GameRecommendationAgent {
-  private model: ChatGoogleGenerativeAI;
+  private model: BaseChatModel;
+  private modelManager: ModelManager;
   private parser: StructuredOutputParser<typeof gameRecommendationSchema>;
   private tools: Tool[];
   private promptTemplate: ChatPromptTemplate;
@@ -66,33 +69,58 @@ export class GameRecommendationAgent {
 
   constructor() {
     this.tools = [new GoogleSearchTool(), new IatdSearchTool()];
-    this.model = new ChatGoogleGenerativeAI({
-      model: 'gemini-2.5-flash-preview-04-17',
-      maxOutputTokens: 4096,
-      temperature: 0.2,
-      apiKey: process.env.GEMINI_API_KEY!,
-      verbose: true,
-    });
-    this.model.withStructuredOutput(gameRecommendationSchema);
+    this.modelManager = new ModelManager();
     this.parser = StructuredOutputParser.fromZodSchema(gameRecommendationSchema);
-    this.promptTemplate = createChatPromptTemplate(this.tools, this.parser.getFormatInstructions());
+
+    // Load model configuration from environment
+    const modelConfig = loadModelConfig();
+
+    try {
+      // Create the model
+      this.model = this.modelManager.createModel(modelConfig);
+
+      this.model.withStructuredOutput(gameRecommendationSchema);
+
+      // Create the prompt template
+      this.promptTemplate = createChatPromptTemplate(
+        this.tools,
+        this.parser.getFormatInstructions()
+      );
+    } catch (error: any) {
+      // eslint-disable-next-line no-console
+      console.error('Error initializing model:', error);
+      throw new Error('Failed to initialize the game recommendation model');
+    }
   }
 
   async getRecommendations(query: string) {
-    this.agent = createReactAgent({
-      llm: this.model,
-      tools: this.tools,
-    });
+    try {
+      // Create a new agent for each request to ensure clean state
+      // Use a specific configuration to ensure compatibility
+      const agentConfig: CreateReactAgentParams = {
+        llm: this.model,
+        tools: this.tools,
+      };
 
-    const messages = await this.promptTemplate.formatMessages({
-      input: query,
-      agent_scratchpad: [],
-    });
+      this.agent = createReactAgent(agentConfig);
 
-    const finalState = await this.agent.invoke({
-      messages: messages,
-      agent_scratchpad: [],
-    });
-    return this.parser.parse(finalState.messages[finalState.messages.length - 1].content);
+      const messages = await this.promptTemplate.formatMessages({
+        input: query,
+        agent_scratchpad: [],
+      });
+
+      const finalState = await this.agent.invoke({
+        messages: messages,
+        agent_scratchpad: [],
+      });
+
+      return this.parser.parse(finalState.messages[finalState.messages.length - 1].content);
+    } catch (error: any) {
+      // eslint-disable-next-line no-console
+      console.error('Error in getRecommendations:', error);
+      throw new Error(
+        'Failed to generate game recommendations: ' + (error.message || String(error))
+      );
+    }
   }
 }

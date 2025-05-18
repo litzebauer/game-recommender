@@ -19,6 +19,7 @@
     "@langchain/langgraph": "^0.2.72",
     "@tanstack/react-router": "^1.116.0",
     "@tanstack/react-start": "^1.116.2",
+    "dotenv": "^16.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "vinxi": "^0.5.4"
