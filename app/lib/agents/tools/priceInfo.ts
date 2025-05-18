@@ -29,7 +29,7 @@ export class PriceInfoTool extends DynamicTool<PriceInfoToolOutput> {
   constructor() {
     super({
       name: 'price_info',
-      description: 'Gets the current price of a game. Input should be a game name.',
+      description: 'Gets the current price of a game. Input should be the game namee.',
       func: async (query: string): Promise<PriceInfoToolOutput> => {
         try {
           const results = await gamesSearchV1({ query: { title: query }, throwOnError: true });

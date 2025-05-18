@@ -38,10 +38,6 @@ const createChatPromptTemplate = (
     9. Current sales and discounts
     Use the available tools to gather more information about potential game recommendations.
     Make sure to verify platform availability check reviews, and current sales before making recommendations.
-    Use Google Search to find the most up-to-date information about games.
-    Use the google_search tool to get the current price of the game from isthereanydeal.com.
-    Get a link to the game's isthereanydeal.com page from the google_search tool.
-    Verify the game exists and the link is valid.
     
     You MUST format your final response as a valid JSON object that matches this schema:
     ${escapedFormatInstructions}
