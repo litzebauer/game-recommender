@@ -13,6 +13,7 @@ export default [
       'build/**',
       'coverage/**',
       '.vinxi/**',
+      '.output/**',
       'public/**',
       'app/routeTree.gen.ts',
       'app/client/**'

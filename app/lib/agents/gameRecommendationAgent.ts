@@ -2,8 +2,8 @@ import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { StructuredOutputParser } from '@langchain/core/output_parsers';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
 import { gameRecommendationSchema } from '../schemas/gameRecommendation';
-import { GoogleSearchTool } from './tools/googleSearch';
-import { IatdSearchTool } from './tools/itadSearch';
+import { GameSearchTool } from './tools/gameSearch';
+import { PriceInfoTool } from './tools/priceInfo';
 import { createReactAgent, CreateReactAgentParams } from '@langchain/langgraph/prebuilt';
 import { Tool } from '@langchain/core/tools';
 import { ModelManager } from '../models/modelFactory';
@@ -68,7 +68,7 @@ export class GameRecommendationAgent {
   private agent: ReturnType<typeof createReactAgent> | null = null;
 
   constructor() {
-    this.tools = [new GoogleSearchTool(), new IatdSearchTool()];
+    this.tools = [new GameSearchTool(), new PriceInfoTool()];
     this.modelManager = new ModelManager();
     this.parser = StructuredOutputParser.fromZodSchema(gameRecommendationSchema);
 

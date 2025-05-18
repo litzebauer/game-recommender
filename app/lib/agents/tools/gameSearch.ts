@@ -1,14 +1,14 @@
 import { DynamicTool } from '@langchain/core/tools';
 import { GoogleCustomSearch } from '@langchain/community/tools/google_custom_search';
 
-export class GoogleSearchTool extends DynamicTool {
+export class GameSearchTool extends DynamicTool {
   private googleSearch: GoogleCustomSearch;
 
   constructor() {
     super({
-      name: 'google_search',
+      name: 'game_search',
       description:
-        'Search the web for information about games and reviews. Input should be a search query.',
+        'Search the web for information about games and reviews. Input should be a search engine query.',
       func: async (query: string) => {
         try {
           const results = await this.googleSearch.invoke(query);
