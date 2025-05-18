@@ -36,16 +36,19 @@ const createChatPromptTemplate = (
     7. Detailed game information
     8. Latest gaming news and trends
     9. Current sales and discounts
-    Use the available tools to gather more information about potential game recommendations.
-    Make sure to verify platform availability check reviews, and current sales before making recommendations.
+
+    Tool Usage Strategy:
+    1. First, analyze the user's query to identify key preferences and requirements
+    2. Use game_search strategically - only when you need specific information about games that match the user's criteria
+    3. Batch related searches together when possible
+    4. Use price_info tool to get current pricing for games you've identified as good matches
+    5. Avoid redundant searches - if you already have information about a game, don't search for it again
     
     You MUST format your final response as a valid JSON object that matches this schema:
     ${escapedFormatInstructions}
 
     DO NOT ask the user any follow-up questions.
-    DO NOT delay tool usage — use tools early and often to gather data.
-
-    Respond only when you have enough information from tool results to produce a valid JSON output.`,
+    Make each tool call count - gather comprehensive information with each search.`,
     ],
     [
       'human',
