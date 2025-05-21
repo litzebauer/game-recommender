@@ -6,7 +6,7 @@ import { ModelConfig, ModelFactory } from './baseModel';
 export class ClaudeModelFactory implements ModelFactory {
   createModel(config: ModelConfig): BaseChatModel {
     return new ChatAnthropic({
-      model: config.modelName || 'claude-3-7-sonnet',
+      model: config.modelName || 'claude-3-5-haiku-20241022',
       maxTokens: config.maxOutputTokens || 4096,
       temperature: config.temperature || 0.2,
       apiKey: config.apiKey,
