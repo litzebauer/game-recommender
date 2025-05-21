@@ -2,11 +2,14 @@ import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { ZodSchema } from 'zod';
 import { ModelConfig, ModelFactory } from './baseModel';
 import { GeminiModelFactory } from './geminiModel';
+import { ClaudeModelFactory } from './claudeModel';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { ChatAnthropic } from '@langchain/anthropic';
 
 // Enum of supported model providers
 export enum ModelProvider {
   GEMINI = 'gemini',
+  CLAUDE = 'claude',
   // Add more providers as needed: OPENAI, ANTHROPIC, etc.
 }
 
@@ -26,6 +29,7 @@ export class ModelManager {
   constructor() {
     this.factories = new Map();
     this.factories.set(ModelProvider.GEMINI, new GeminiModelFactory());
+    this.factories.set(ModelProvider.CLAUDE, new ClaudeModelFactory());
     // Register additional model factories here as they're implemented
   }
 
@@ -62,6 +66,10 @@ export class ModelManager {
   private getProviderFromModel(model: BaseChatModel): ModelProvider {
     if (model instanceof ChatGoogleGenerativeAI) {
       return ModelProvider.GEMINI;
+    }
+
+    if (model instanceof ChatAnthropic) {
+      return ModelProvider.CLAUDE;
     }
 
     // Add more model type checks as needed

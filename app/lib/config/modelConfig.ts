@@ -7,6 +7,7 @@ dotenv.config({ path: '.env.config' });
 // Default model configurations
 const DEFAULT_MODEL_PROVIDER = ModelProvider.GEMINI;
 const DEFAULT_GEMINI_MODEL = 'gemini-2.5-flash-preview-04-17';
+const DEFAULT_CLAUDE_MODEL = 'claude-3-7-sonnet-20250219';
 const DEFAULT_TEMPERATURE = 0.2;
 const DEFAULT_MAX_OUTPUT_TOKENS = 4096;
 const DEFAULT_VERBOSE = true;
@@ -28,6 +29,15 @@ export function loadModelConfig(): ModelEnvironmentConfig {
         provider,
         modelName: process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL,
         apiKey: process.env.GEMINI_API_KEY!,
+        temperature: parseFloat(process.env.MODEL_TEMPERATURE || '') || DEFAULT_TEMPERATURE,
+        maxOutputTokens: parseInt(process.env.MAX_OUTPUT_TOKENS || '') || DEFAULT_MAX_OUTPUT_TOKENS,
+        verbose: process.env.MODEL_VERBOSE === 'true' || DEFAULT_VERBOSE,
+      };
+    case ModelProvider.CLAUDE:
+      return {
+        provider,
+        modelName: process.env.CLAUDE_MODEL || DEFAULT_CLAUDE_MODEL,
+        apiKey: process.env.ANTHROPIC_API_KEY!,
         temperature: parseFloat(process.env.MODEL_TEMPERATURE || '') || DEFAULT_TEMPERATURE,
         maxOutputTokens: parseInt(process.env.MAX_OUTPUT_TOKENS || '') || DEFAULT_MAX_OUTPUT_TOKENS,
         verbose: process.env.MODEL_VERBOSE === 'true' || DEFAULT_VERBOSE,

@@ -35,12 +35,18 @@ The application uses dotenv to load environment variables from a `.env.config` f
 MODEL_PROVIDER=gemini
 GEMINI_MODEL=gemini-2.5-flash-preview-04-17
 GEMINI_API_KEY=your-api-key-here
+
+# For Claude model (optional)
+# MODEL_PROVIDER=claude
+# CLAUDE_MODEL=claude-3-7-sonnet
+# ANTHROPIC_API_KEY=your-anthropic-api-key-here
+
 MODEL_TEMPERATURE=0.2
 MAX_OUTPUT_TOKENS=4096
 MODEL_VERBOSE=true
 ```
 
-2. Replace `your-api-key-here` with your actual Gemini API key
+2. Replace `your-api-key-here` with your actual Gemini API key or Anthropic API key depending on the model provider you choose.
 
 ### Environment Variables
 
@@ -48,7 +54,9 @@ MODEL_VERBOSE=true
 | ----------------- | -------------------------- | ------------------------------ |
 | MODEL_PROVIDER    | AI model provider to use   | gemini                         |
 | GEMINI_MODEL      | Gemini model name          | gemini-2.5-flash-preview-04-17 |
-| GEMINI_API_KEY    | Your Gemini API key        | (required)                     |
+| GEMINI_API_KEY    | Your Gemini API key        | (required for Gemini)          |
+| CLAUDE_MODEL      | Claude model name          | claude-3-7-sonnet              |
+| ANTHROPIC_API_KEY | Your Anthropic API key     | (required for Claude)          |
 | MODEL_TEMPERATURE | Temperature for generation | 0.2                            |
 | MAX_OUTPUT_TOKENS | Maximum output tokens      | 4096                           |
 | MODEL_VERBOSE     | Enable verbose logging     | true                           |

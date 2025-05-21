@@ -1,0 +1,24 @@
+import { ChatAnthropic } from '@langchain/anthropic';
+import { BaseChatModel } from '@langchain/core/language_models/chat_models';
+import { ZodSchema } from 'zod';
+import { ModelConfig, ModelFactory } from './baseModel';
+
+export class ClaudeModelFactory implements ModelFactory {
+  createModel(config: ModelConfig): BaseChatModel {
+    return new ChatAnthropic({
+      model: config.modelName || 'claude-3-7-sonnet',
+      maxTokens: config.maxOutputTokens || 4096,
+      temperature: config.temperature || 0.2,
+      apiKey: config.apiKey,
+      verbose: config.verbose || false,
+    });
+  }
+
+  withStructuredOutput(model: BaseChatModel, schema: ZodSchema): BaseChatModel {
+    if (model instanceof ChatAnthropic) {
+      model.withStructuredOutput(schema);
+      return model;
+    }
+    throw new Error('Model is not a ChatAnthropic instance');
+  }
+}
