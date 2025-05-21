@@ -110,7 +110,7 @@ function Home() {
                       </a>
                       {game.discount > 0 && (
                         <span className="ml-2 text-green-600">
-                          ({game.discount * 100}% off from ${game.originalPrice.toFixed(2)})
+                          ({game.discount}% off from ${game.originalPrice.toFixed(2)})
                         </span>
                       )}
                     </p>

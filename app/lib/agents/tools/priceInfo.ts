@@ -14,7 +14,8 @@ client.setConfig({
 export type PriceInfoToolOutput =
   | {
       url: string;
-      priceInfo: ObjPrice;
+      currentPrice: ObjPrice;
+      regularPrice: ObjPrice;
     }
   | string;
 
@@ -47,14 +48,16 @@ export class PriceInfoTool extends DynamicTool<PriceInfoToolOutput> {
             throwOnError: true,
           });
 
-          const priceInfo = pricesOverview.data.prices[0].current?.price ?? null;
-          if (!priceInfo) {
+          const currentPriceInfo = pricesOverview.data.prices[0].current?.price ?? null;
+          const regularPriceInfo = pricesOverview.data.prices[0].current?.regular ?? null;
+          if (!currentPriceInfo || !regularPriceInfo) {
             return 'No price information found.';
           }
 
           return {
             url: pricesOverview.data.prices[0].urls.game ?? '',
-            priceInfo,
+            currentPrice: currentPriceInfo,
+            regularPrice: regularPriceInfo,
           };
         } catch (error) {
           // eslint-disable-next-line no-console

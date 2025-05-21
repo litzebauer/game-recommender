@@ -1,7 +1,8 @@
-import { DynamicTool } from '@langchain/core/tools';
+import { DynamicStructuredTool } from '@langchain/core/tools';
 import { GoogleCustomSearch } from '@langchain/community/tools/google_custom_search';
+import { z } from 'zod';
 
-export class GameSearchTool extends DynamicTool {
+export class GameSearchTool extends DynamicStructuredTool {
   private googleSearch: GoogleCustomSearch;
 
   constructor() {
@@ -9,7 +10,10 @@ export class GameSearchTool extends DynamicTool {
       name: 'game_search',
       description:
         'Search the web for information about games and reviews. Input should be a search engine query.',
-      func: async (query: string) => {
+      schema: z.object({
+        query: z.string().describe('The search query about games and reviews'),
+      }),
+      func: async ({ query }) => {
         try {
           const results = await this.googleSearch.invoke(query);
           return JSON.stringify(results);
