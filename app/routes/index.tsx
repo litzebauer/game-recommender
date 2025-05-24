@@ -110,12 +110,14 @@ function Home() {
                       >
                         ${recommendedGame.game.currentPrice?.toFixed(2) ?? 'N/A'}
                       </a>
-                      {recommendedGame.game.discount && recommendedGame.game.discount > 0 && (
-                        <span className="ml-2 text-green-600">
-                          ({recommendedGame.game.discount}% off from $
-                          {recommendedGame.game.originalPrice?.toFixed(2) ?? 'N/A'})
-                        </span>
-                      )}
+                      {recommendedGame.game.discount &&
+                        recommendedGame.game.originalPrice &&
+                        recommendedGame.game.discount > 0 && (
+                          <span className="ml-2 text-green-600">
+                            ({recommendedGame.game.discount}% off from $
+                            {recommendedGame.game.originalPrice?.toFixed(2)})
+                          </span>
+                        )}
                     </p>
                     <p className="text-sm text-gray-600 mt-2">
                       <span className="font-medium">Reasoning:</span> {recommendedGame.reasoning}

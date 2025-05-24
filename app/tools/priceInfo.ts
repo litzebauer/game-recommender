@@ -59,8 +59,8 @@ export class PriceInfoTool extends DynamicTool<PriceInfoToolOutput> {
           };
         } catch (error) {
           // eslint-disable-next-line no-console
-          console.error('Error performing game price lookup: ', error);
-          throw error;
+          console.warn('Error performing game price lookup: ', error);
+          return Promise.reject(error);
         }
       },
     });
