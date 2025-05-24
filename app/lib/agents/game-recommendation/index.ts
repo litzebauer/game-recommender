@@ -27,7 +27,7 @@ function createGameRecommendationGraph() {
 }
 
 const graph = createGameRecommendationGraph();
-graph.invoke({ userRequest: 'best narrative rpgs' });
+
 export const run = async (userRequest: string): Promise<GameRecommendation[]> => {
   const graphState = await graph.invoke({ userRequest });
 

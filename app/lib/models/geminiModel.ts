@@ -2,6 +2,7 @@ import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { ZodSchema } from 'zod';
 import { ModelConfig, ModelFactory } from './baseModel';
+import { Runnable } from '@langchain/core/runnables';
 
 export class GeminiModelFactory implements ModelFactory {
   createModel(config: ModelConfig): BaseChatModel {
@@ -14,10 +15,9 @@ export class GeminiModelFactory implements ModelFactory {
     });
   }
 
-  withStructuredOutput(model: BaseChatModel, schema: ZodSchema): BaseChatModel {
+  withStructuredOutput(model: BaseChatModel, schema: ZodSchema): Runnable {
     if (model instanceof ChatGoogleGenerativeAI) {
-      model.withStructuredOutput(schema);
-      return model;
+      return model.withStructuredOutput(schema);
     }
     throw new Error('Model is not a ChatGoogleGenerativeAI instance');
   }

@@ -15,8 +15,7 @@ export class GameSearchTool extends DynamicStructuredTool {
       }),
       func: async ({ query }) => {
         try {
-          const results = await this.googleSearch.invoke(query);
-          return JSON.stringify(results);
+          return await this.googleSearch.invoke(query);
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error('Error performing Google search:', error);

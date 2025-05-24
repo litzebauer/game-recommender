@@ -5,6 +5,7 @@ import { GeminiModelFactory } from './geminiModel';
 import { ClaudeModelFactory } from './claudeModel';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { ChatAnthropic } from '@langchain/anthropic';
+import { Runnable } from '@langchain/core/runnables';
 
 // Enum of supported model providers
 export enum ModelProvider {
@@ -51,7 +52,7 @@ export class ModelManager {
     return factory.createModel(modelConfig);
   }
 
-  withStructuredOutput(model: BaseChatModel, schema: ZodSchema): BaseChatModel {
+  withStructuredOutput(model: BaseChatModel, schema: ZodSchema): Runnable {
     const provider = this.getProviderFromModel(model);
     const factory = this.factories.get(provider);
 
