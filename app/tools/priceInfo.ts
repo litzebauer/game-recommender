@@ -1,7 +1,7 @@
 import { DynamicTool } from '@langchain/core/tools';
-import { client } from '../../../client/itad/client.gen';
-import { gamesSearchV1, gamesOverviewV2 } from '../../../client/itad/sdk.gen';
-import type { ObjGame, ObjPrice, RespGamesSearch } from '../../../client/itad/types.gen';
+import { client } from '../client/itad/client.gen';
+import { gamesSearchV1, gamesOverviewV2 } from '../client/itad/sdk.gen';
+import type { ObjGame, ObjPrice, RespGamesSearch } from '../client/itad/types.gen';
 
 function isRespGamesSearch(response: unknown): response is RespGamesSearch {
   return Array.isArray(response);
@@ -11,17 +11,15 @@ client.setConfig({
   auth: () => process.env.IS_THERE_ANY_DEAL_API_KEY!,
 });
 
-export type PriceInfoToolOutput =
-  | {
-      url: string;
-      currentPrice: ObjPrice;
-      regularPrice: ObjPrice;
-    }
-  | string;
+export type PriceInfoToolOutput = {
+  url: string;
+  currentPrice: ObjPrice;
+  regularPrice: ObjPrice;
+};
 
 const getGame = (results: RespGamesSearch): ObjGame | null => {
   if (isRespGamesSearch(results)) {
-    return results.find(game => game.type === 'game') ?? null;
+    return results.find(game => game.type === 'game' || game.type === 'package') ?? null;
   }
   return null;
 };
@@ -37,7 +35,7 @@ export class PriceInfoTool extends DynamicTool<PriceInfoToolOutput> {
           const game = getGame(results.data);
 
           if (game === null) {
-            return 'No matching game found.';
+            throw new Error('No matching game found.');
           }
 
           const pricesOverview = await gamesOverviewV2({
@@ -51,7 +49,7 @@ export class PriceInfoTool extends DynamicTool<PriceInfoToolOutput> {
           const currentPriceInfo = pricesOverview.data.prices[0].current?.price ?? null;
           const regularPriceInfo = pricesOverview.data.prices[0].current?.regular ?? null;
           if (!currentPriceInfo || !regularPriceInfo) {
-            return 'No price information found.';
+            throw new Error('No price information found.');
           }
 
           return {
@@ -62,7 +60,7 @@ export class PriceInfoTool extends DynamicTool<PriceInfoToolOutput> {
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error('Error performing game price lookup: ', error);
-          return 'Error performing search. Please try again.';
+          throw error;
         }
       },
     });

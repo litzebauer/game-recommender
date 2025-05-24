@@ -1,26 +1,22 @@
 import { z } from 'zod';
 
+export const gameSchema = z.object({
+  currentPrice: z.number().optional(),
+  originalPrice: z.number().optional(),
+  discount: z.number().optional(),
+  link: z.string().optional(),
+  name: z.string(),
+  description: z.string(),
+  genre: z.string().optional(),
+  playtime: z.string().optional(),
+  platforms: z.array(z.string()),
+});
+
+export type Game = z.infer<typeof gameSchema>;
+
 export const gameRecommendationSchema = z.object({
-  games: z
-    .array(
-      z.object({
-        currentPrice: z.number(),
-        originalPrice: z.number(),
-        discount: z.number(),
-        link: z.string(),
-        name: z.string(),
-        genre: z.string(),
-        playtime: z.string(),
-        reasoning: z.string(),
-        platforms: z.array(z.string()),
-      })
-    )
-    .length(5),
-  queryUnderstanding: z.object({
-    keyPreferences: z.array(z.string()),
-    playtimePreference: z.string(),
-    genrePreferences: z.array(z.string()).optional(),
-  }),
+  game: gameSchema,
+  reasoning: z.string(),
 });
 
 export type GameRecommendation = z.infer<typeof gameRecommendationSchema>;

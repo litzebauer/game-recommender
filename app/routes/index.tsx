@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { getRecommendations } from './api/recommendationAgent';
+import { GameRecommendation } from '../lib/schemas/gameRecommendation';
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -9,17 +10,17 @@ export const Route = createFileRoute('/')({
 function Home() {
   const [mood, setMood] = useState('');
   const [platforms, setPlatforms] = useState<string[]>([]);
-  const [recommendedGames, setRecommendedGames] = useState<any[]>([]);
+  const [recommendedGames, setRecommendedGames] = useState<GameRecommendation[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = await getRecommendations({
+    const results = await getRecommendations({
       data: { query: mood },
     });
 
     // Store the recommended games
-    setRecommendedGames(result.games);
+    setRecommendedGames(results);
   };
 
   return (
@@ -85,37 +86,39 @@ function Home() {
           <div className="bg-white shadow-lg rounded-lg p-6">
             <h2 className="text-xl font-bold mb-4">Recommended Games</h2>
             <div className="space-y-4">
-              {recommendedGames.map((game, index) => (
+              {recommendedGames.map((recommendedGame, index) => (
                 <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
-                  <h3 className="text-lg font-semibold">{game.name}</h3>
+                  <h3 className="text-lg font-semibold">{recommendedGame.game.name}</h3>
                   <div className="mt-2 space-y-1">
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium">Genre:</span> {game.genre}
+                      <span className="font-medium">Genre:</span> {recommendedGame.game.genre}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium">Playtime:</span> {game.playtime}
+                      <span className="font-medium">Playtime:</span> {recommendedGame.game.playtime}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium">Platforms:</span> {game.platforms.join(', ')}
+                      <span className="font-medium">Platforms:</span>{' '}
+                      {recommendedGame.game.platforms.join(', ')}
                     </p>
                     <p className="text-sm text-gray-600">
                       <span className="font-medium">Price:</span>{' '}
                       <a
-                        href={game.link}
+                        href={recommendedGame.game.link}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-indigo-600 hover:text-indigo-800 hover:underline"
                       >
-                        ${game.currentPrice.toFixed(2)}
+                        ${recommendedGame.game.currentPrice?.toFixed(2) ?? 'N/A'}
                       </a>
-                      {game.discount > 0 && (
+                      {recommendedGame.game.discount && recommendedGame.game.discount > 0 && (
                         <span className="ml-2 text-green-600">
-                          ({game.discount}% off from ${game.originalPrice.toFixed(2)})
+                          ({recommendedGame.game.discount}% off from $
+                          {recommendedGame.game.originalPrice?.toFixed(2) ?? 'N/A'})
                         </span>
                       )}
                     </p>
                     <p className="text-sm text-gray-600 mt-2">
-                      <span className="font-medium">Reasoning:</span> {game.reasoning}
+                      <span className="font-medium">Reasoning:</span> {recommendedGame.reasoning}
                     </p>
                   </div>
                 </div>
