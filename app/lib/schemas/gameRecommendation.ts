@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const gameSchema = z.object({
+  id: z.string(),
   currentPrice: z.number().optional(),
   originalPrice: z.number().optional(),
   discount: z.number().optional(),
@@ -9,7 +10,8 @@ export const gameSchema = z.object({
   description: z.string(),
   genre: z.string().optional(),
   playtime: z.string().optional(),
-  platforms: z.array(z.string()),
+  tags: z.array(z.string()).optional(),
+  imageUrl: z.string().optional(),
 });
 
 export type Game = z.infer<typeof gameSchema>;

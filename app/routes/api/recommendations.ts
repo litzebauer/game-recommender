@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { run } from '../../lib/agents/game-recommendation';
+import { getRecommendations as getRecommendationsService } from '../../lib/services/recommendations';
 import type { GameRecommendation } from '../../lib/schemas/gameRecommendation';
 
 export const getRecommendations = createServerFn({
@@ -8,7 +8,7 @@ export const getRecommendations = createServerFn({
   .validator((d: { query: string }) => d)
   .handler(async ({ data }): Promise<GameRecommendation[]> => {
     try {
-      return await run(data.query);
+      return await getRecommendationsService(data);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error generating game recommendations:', error);
