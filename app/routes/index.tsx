@@ -1,21 +1,7 @@
 import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  Container,
-  Paper,
-  Title,
-  TextInput,
-  Button,
-  Stack,
-  Text,
-  Group,
-  Badge,
-  Anchor,
-  Divider,
-} from '@mantine/core';
 import { getRecommendations } from './api/recommendationAgent';
 import { GameRecommendation } from '../lib/schemas/gameRecommendation';
-import '@mantine/core/styles.css';
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -23,121 +9,126 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   const [mood, setMood] = useState('');
+  const [platforms, setPlatforms] = useState<string[]>([]);
   const [recommendedGames, setRecommendedGames] = useState<GameRecommendation[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!mood.trim()) {
-      return;
-    }
+    const results = await getRecommendations({
+      data: { query: mood },
+    });
 
-    setIsLoading(true);
-    try {
-      const results = await getRecommendations({
-        data: { query: mood },
-      });
-      setRecommendedGames(results);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error getting recommendations:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    // Store the recommended games
+    setRecommendedGames(results);
   };
 
   return (
-    <Container size="md" py="xl">
-      <Paper shadow="md" p="xl" radius="md">
-        <Stack gap="lg">
-          <Title order={1} ta="center">
-            Game Recommender
-          </Title>
-
-          <form onSubmit={handleSubmit}>
-            <Stack gap="md">
-              <TextInput
-                label="What type of game are you looking for?"
-                placeholder="e.g., dark fantasy RPG"
-                value={mood}
-                onChange={event => setMood(event.currentTarget.value)}
-                required
-              />
-              <Button type="submit" loading={isLoading} disabled={!mood.trim()} fullWidth>
-                Get Recommendations
-              </Button>
-            </Stack>
-          </form>
-        </Stack>
-      </Paper>
+    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
+        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+          <div className="max-w-md mx-auto">
+            <div className="divide-y divide-gray-200">
+              <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                <h1 className="text-2xl font-bold mb-8">Game Recommender</h1>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      What type of game are you looking for?
+                    </label>
+                    <input
+                      type="text"
+                      value={mood}
+                      onChange={e => setMood(e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="e.g., dark fantasy RPG"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Select Platforms
+                    </label>
+                    <div className="mt-2 space-y-2">
+                      {['PS5', 'Xbox Game Pass', 'Steam', 'Switch'].map(platform => (
+                        <label key={platform} className="inline-flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={platforms.includes(platform)}
+                            onChange={e => {
+                              if (e.target.checked) {
+                                setPlatforms([...platforms, platform]);
+                              } else {
+                                setPlatforms(platforms.filter(p => p !== platform));
+                              }
+                            }}
+                            className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                          />
+                          <span className="ml-2">{platform}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Get Recommendation
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {recommendedGames.length > 0 && (
-        <Paper shadow="md" p="xl" radius="md" mt="xl">
-          <Stack gap="lg">
-            <Title order={2}>Recommended Games</Title>
-
-            <Stack gap="md">
+        <div className="mt-8 max-w-md mx-auto">
+          <div className="bg-white shadow-lg rounded-lg p-6">
+            <h2 className="text-xl font-bold mb-4">Recommended Games</h2>
+            <div className="space-y-4">
               {recommendedGames.map((recommendedGame, index) => (
-                <Paper key={index} p="md" withBorder radius="sm">
-                  <Stack gap="sm">
-                    <Title order={3} size="h4">
-                      {recommendedGame.game.name}
-                    </Title>
-
-                    <Group gap="xs" wrap="wrap">
-                      <Badge variant="light" color="blue">
-                        {recommendedGame.game.genre}
-                      </Badge>
-                      <Badge variant="light" color="green">
-                        {recommendedGame.game.playtime}
-                      </Badge>
-                    </Group>
-
-                    <Group gap="xs" wrap="wrap">
-                      {recommendedGame.game.platforms.map((platform, platformIndex) => (
-                        <Badge key={platformIndex} variant="outline" size="sm">
-                          {platform}
-                        </Badge>
-                      ))}
-                    </Group>
-
-                    <Group gap="xs" align="center">
-                      <Text size="sm" fw={500}>
-                        Price:
-                      </Text>
-                      <Anchor
+                <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
+                  <h3 className="text-lg font-semibold">{recommendedGame.game.name}</h3>
+                  <div className="mt-2 space-y-1">
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Genre:</span> {recommendedGame.game.genre}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Playtime:</span> {recommendedGame.game.playtime}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Platforms:</span>{' '}
+                      {recommendedGame.game.platforms.join(', ')}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Price:</span>{' '}
+                      <a
                         href={recommendedGame.game.link}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="text-indigo-600 hover:text-indigo-800 hover:underline"
                       >
                         ${recommendedGame.game.currentPrice?.toFixed(2) ?? 'N/A'}
-                      </Anchor>
+                      </a>
                       {recommendedGame.game.discount &&
                         recommendedGame.game.originalPrice &&
                         recommendedGame.game.discount > 0 && (
-                          <Badge color="red" variant="light" size="sm">
-                            {recommendedGame.game.discount}% off from $
-                            {recommendedGame.game.originalPrice?.toFixed(2)}
-                          </Badge>
+                          <span className="ml-2 text-green-600">
+                            ({recommendedGame.game.discount}% off from $
+                            {recommendedGame.game.originalPrice?.toFixed(2)})
+                          </span>
                         )}
-                    </Group>
-
-                    <Divider />
-
-                    <Text size="sm">
-                      <Text component="span" fw={500}>
-                        Reasoning:
-                      </Text>{' '}
-                      {recommendedGame.reasoning}
-                    </Text>
-                  </Stack>
-                </Paper>
+                    </p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      <span className="font-medium">Reasoning:</span> {recommendedGame.reasoning}
+                    </p>
+                  </div>
+                </div>
               ))}
-            </Stack>
-          </Stack>
-        </Paper>
+            </div>
+          </div>
+        </div>
       )}
-    </Container>
+    </div>
   );
 }
