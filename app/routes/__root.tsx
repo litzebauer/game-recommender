@@ -1,5 +1,11 @@
 import type { ReactNode } from 'react';
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
+import { ColorSchemeScript, MantineProvider, createTheme, mantineHtmlProps } from '@mantine/core';
+import '@mantine/core/styles.css';
+
+const theme = createTheme({
+  /** Your theme override here */
+});
 
 export const Route = createRootRoute({
   head: () => ({
@@ -29,13 +35,16 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html>
+    <html {...mantineHtmlProps}>
       <head>
         <HeadContent />
+        <ColorSchemeScript />
       </head>
       <body>
-        {children}
-        <Scripts />
+        <MantineProvider theme={theme} defaultColorScheme="auto">
+          {children}
+          <Scripts />
+        </MantineProvider>
       </body>
     </html>
   );
