@@ -36,6 +36,7 @@ export async function fetchPrices(state: GameRecommendationState) {
               originalPrice: priceInfo.regularPrice.amount,
               link: priceInfo.url,
               discount: discountPercentage,
+              imageUrl: priceInfo.imageUrl,
             },
           };
         } catch (error) {

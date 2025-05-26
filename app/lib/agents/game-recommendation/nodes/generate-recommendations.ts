@@ -62,13 +62,13 @@ Current Game Recommendations:
 {gameRecommendations}
 
 Instructions:
-- Keep all the provided games (do not remove any)
 - Enhance the reasoning for each game to explain why it's a perfect match for the user's request
 - Make the reasoning personal and specific to what the user asked for
 - Highlight unique features, gameplay elements, or aspects that directly address the user's preferences
 - Include information about pricing/discounts if available and relevant
-- Make each reasoning compelling and informative (2-3 sentences minimum)
+- Keep the reasoning concise and to the point (3 sentences maximum)
 - Maintain all existing game information (name, description, platforms, pricing, etc.)
+- Return the top 5 recommendations with the best reasoning
 
 Return the enhanced recommendations with improved reasoning:
 `);

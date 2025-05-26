@@ -75,7 +75,12 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
           )}
         </div>
 
-        <Button className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white border-0 rounded-xl px-6 transition-all duration-300 hover:scale-105">
+        <Button
+          className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white border-0 rounded-xl px-6 transition-all duration-300 hover:scale-105"
+          onClick={() => {
+            window.open(gameRecommendation.game.link, '_blank');
+          }}
+        >
           View Game
         </Button>
       </div>
