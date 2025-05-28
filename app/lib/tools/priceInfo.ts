@@ -13,7 +13,6 @@ client.setConfig({
 
 export type PriceInfoToolOutput = {
   url: string;
-  imageUrl?: string;
   currentPrice: ObjPrice;
   regularPrice: ObjPrice;
 };
@@ -55,7 +54,6 @@ export class PriceInfoTool extends DynamicTool<PriceInfoToolOutput> {
 
           return {
             url: pricesOverview.data.prices[0].urls.game ?? '',
-            imageUrl: game.assets.banner300 ?? undefined,
             currentPrice: currentPriceInfo,
             regularPrice: regularPriceInfo,
           };

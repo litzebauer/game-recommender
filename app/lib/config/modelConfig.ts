@@ -1,8 +1,10 @@
 import { OpenRouterConfig } from '../models/openrouter';
 import dotenv from 'dotenv';
 
-// Load environment variables from .env.config
+// Load environment variables from .env.config and .env files
+// .env takes precedence over .env.config
 dotenv.config({ path: '.env.config' });
+dotenv.config({ path: '.env' });
 
 // Default model configurations
 const DEFAULT_MODEL_NAME = 'anthropic/claude-3.7-sonnet';

@@ -1,22 +1,27 @@
 import { PriceInfoTool } from '../../../tools/priceInfo';
-import { GameRecommendation } from '../../../schemas/gameRecommendation';
-import { GameRecommendationState } from '../state';
+import { GameRecommendationState, GamePriceInfo } from '../state';
+import { generateGameId } from '../utils';
 
 const priceInfoTool = new PriceInfoTool();
 
 export async function fetchPrices(state: GameRecommendationState) {
-  const CONCURRENT_LIMIT = 3; // Adjust based on API limits
+  if (!state.gameNames || state.gameNames.length === 0) {
+    return {
+      gamePriceInfo: [],
+    };
+  }
 
-  const gameRecommendationsWithPrices: GameRecommendation[] = [];
+  const CONCURRENT_LIMIT = 3; // Adjust based on API limits
+  const gamePriceInfo: GamePriceInfo[] = [];
 
   // Process games in batches to avoid rate limits
-  for (let i = 0; i < state.gameRecommendations.length; i += CONCURRENT_LIMIT) {
-    const batch = state.gameRecommendations.slice(i, i + CONCURRENT_LIMIT);
+  for (let i = 0; i < state.gameNames.length; i += CONCURRENT_LIMIT) {
+    const batch = state.gameNames.slice(i, i + CONCURRENT_LIMIT);
 
     const batchResults = await Promise.allSettled(
-      batch.map(async gameRecommendation => {
+      batch.map(async gameName => {
         try {
-          const priceInfo = await priceInfoTool.invoke(gameRecommendation.game.name);
+          const priceInfo = await priceInfoTool.invoke(gameName);
 
           // Calculate discount as percentage: ((original - current) / original) * 100
           const discountPercentage =
@@ -29,20 +34,25 @@ export async function fetchPrices(state: GameRecommendationState) {
               : 0;
 
           return {
-            ...gameRecommendation,
-            game: {
-              ...gameRecommendation.game,
-              currentPrice: priceInfo.currentPrice.amount,
-              originalPrice: priceInfo.regularPrice.amount,
-              link: priceInfo.url,
-              discount: discountPercentage,
-              imageUrl: priceInfo.imageUrl,
-            },
-          };
+            id: generateGameId(gameName), // Generate consistent ID
+            name: gameName,
+            currentPrice: priceInfo.currentPrice.amount,
+            originalPrice: priceInfo.regularPrice.amount,
+            link: priceInfo.url,
+            discount: discountPercentage,
+          } as GamePriceInfo;
         } catch (error) {
           // eslint-disable-next-line no-console
-          console.warn(`Failed to get price for ${gameRecommendation.game.name}:`, error);
-          return { ...gameRecommendation, price: null, currency: null, link: null }; // Keep game but mark price as unavailable
+          console.warn(`Failed to get price for ${gameName}:`, error);
+          return {
+            id: generateGameId(gameName), // Generate consistent ID even for failures
+            name: gameName,
+            currentPrice: null,
+            originalPrice: null,
+            link: null,
+            discount: null,
+            imageUrl: null,
+          } as GamePriceInfo;
         }
       })
     );
@@ -50,17 +60,17 @@ export async function fetchPrices(state: GameRecommendationState) {
     // Extract successful results
     batchResults.forEach(result => {
       if (result.status === 'fulfilled') {
-        gameRecommendationsWithPrices.push(result.value as GameRecommendation);
+        gamePriceInfo.push(result.value);
       }
     });
 
     // Optional: Add delay between batches if needed
-    if (i + CONCURRENT_LIMIT < state.gameRecommendations.length) {
+    if (i + CONCURRENT_LIMIT < state.gameNames.length) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   }
 
   return {
-    gameRecommendations: gameRecommendationsWithPrices,
+    gamePriceInfo,
   };
 }
