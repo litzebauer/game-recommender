@@ -34,7 +34,8 @@ export async function combineGameData(
   });
 
   return {
-    gameDescriptions: combinedGames,
+    games: combinedGames,
+    gameDescriptions: undefined, // Clear to save memory
     gamePriceInfo: undefined, // Clear to save memory
     gameNames: undefined, // Clear to save memory
   };

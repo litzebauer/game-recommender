@@ -17,7 +17,8 @@ export const AgentState = Annotation.Root({
   searchQuery: Annotation<string>,
   rawSearchResults: Annotation<string[]>,
   gameNames: Annotation<string[]>,
-  gameDescriptions: Annotation<GameDescription[] | Game[]>,
+  gameDescriptions: Annotation<GameDescription[]>,
   gamePriceInfo: Annotation<GamePriceInfo[]>,
   gameRecommendations: Annotation<GameRecommendation[]>,
+  games: Annotation<Game[]>,
 });

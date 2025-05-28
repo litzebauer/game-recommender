@@ -44,21 +44,18 @@ export async function generateRecommendations(
   state: GameRecommendationState
 ): Promise<Partial<GameRecommendationState>> {
   // If we have no games to work with, return empty
-  if (!state.gameDescriptions || state.gameDescriptions.length === 0) {
+  if (!state.games || state.games.length === 0) {
     return {
       gameRecommendations: [],
     };
   }
 
-  // At this point, gameDescriptions contains Game[] objects (after combine step)
-  const games = state.gameDescriptions as Game[];
-
   // Create game recommendations from the combined game data
-  const gameRecommendations = await createRecommendationsFromGames(state.userRequest, games);
+  const gameRecommendations = await createRecommendationsFromGames(state.userRequest, state.games);
 
   return {
     gameRecommendations,
-    gameDescriptions: undefined, // Clear to save memory
+    games: undefined, // Clear to save memory
   };
 }
 
