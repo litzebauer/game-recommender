@@ -14,11 +14,10 @@
   },
   "dependencies": {
     "@hey-api/client-fetch": "^0.10.1",
-    "@langchain/anthropic": "^0.3.20",
     "@langchain/community": "^0.3.42",
     "@langchain/core": "^0.3.55",
-    "@langchain/google-genai": "^0.2.9",
     "@langchain/langgraph": "^0.2.72",
+    "@langchain/openai": "^0.5.11",
     "@langchain/tavily": "^0.1.2",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",

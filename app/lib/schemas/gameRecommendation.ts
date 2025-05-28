@@ -2,16 +2,16 @@ import { z } from 'zod';
 
 export const gameSchema = z.object({
   id: z.string(),
-  currentPrice: z.number().optional(),
-  originalPrice: z.number().optional(),
-  discount: z.number().optional(),
-  link: z.string().optional(),
+  currentPrice: z.number().optional().nullable(),
+  originalPrice: z.number().optional().nullable(),
+  discount: z.number().optional().nullable(),
+  link: z.string().optional().nullable(),
   name: z.string(),
   description: z.string(),
-  genre: z.string().optional(),
-  playtime: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  imageUrl: z.string().optional(),
+  genre: z.string().optional().nullable(),
+  playtime: z.string().optional().nullable(),
+  tags: z.array(z.string()).optional().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });
 
 export type Game = z.infer<typeof gameSchema>;

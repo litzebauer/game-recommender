@@ -3,6 +3,13 @@ import { TavilySearch, TavilySearchResponse } from '@langchain/tavily';
 
 const tool = new TavilySearch({
   maxResults: 5,
+  includeDomains: [
+    'www.ign.com',
+    'www.metacritic.com',
+    'www.gamespot.com',
+    'www.pcgamer.com',
+    'www.polygon.com',
+  ],
 });
 
 export async function searchGames(

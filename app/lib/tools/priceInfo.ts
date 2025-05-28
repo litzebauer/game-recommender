@@ -1,7 +1,7 @@
 import { DynamicTool } from '@langchain/core/tools';
-import { client } from '../client/itad/client.gen';
-import { gamesSearchV1, gamesOverviewV2 } from '../client/itad/sdk.gen';
-import type { ObjGame, ObjPrice, RespGamesSearch } from '../client/itad/types.gen';
+import { client } from '../../client/itad/client.gen';
+import { gamesSearchV1, gamesOverviewV2 } from '../../client/itad/sdk.gen';
+import type { ObjGame, ObjPrice, RespGamesSearch } from '../../client/itad/types.gen';
 
 function isRespGamesSearch(response: unknown): response is RespGamesSearch {
   return Array.isArray(response);

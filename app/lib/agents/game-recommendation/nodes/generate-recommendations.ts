@@ -1,9 +1,30 @@
 import { GameRecommendationState } from '../state';
 import { GameRecommendation, gameRecommendationSchema } from '../../../schemas/gameRecommendation';
-import { ModelManager } from '../../../models/modelFactory';
+import { createStructuredOpenRouterModel } from '../../../models/openrouter';
 import { loadModelConfig } from '../../../config/modelConfig';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { z } from 'zod';
+
+// Create a prompt template for enhancing reasoning
+const prompt = ChatPromptTemplate.fromTemplate(`
+    You are an expert game recommendation specialist. Your task is to enhance the reasoning for each game recommendation to clearly explain why each game matches the user's request.
+    
+    User's Original Request: {userRequest}
+    
+    Current Game Recommendations:
+    {gameRecommendations}
+    
+    Instructions:
+    - Enhance the reasoning for each game to explain why it's a perfect match for the user's request
+    - Make the reasoning personal and specific to what the user asked for
+    - Highlight unique features, gameplay elements, or aspects that directly address the user's preferences
+    - Include information about pricing/discounts if available and relevant
+    - Keep the reasoning concise and to the point (3 sentences maximum)
+    - Maintain all existing game information (name, description, platforms, pricing, etc.)
+    - Return the top 5 recommendations with the best reasoning
+    
+    Return the enhanced recommendations with improved reasoning:
+    `);
 
 // Schema for the final recommendation selection
 const finalRecommendationsSchema = z.object({
@@ -48,37 +69,14 @@ const enhanceRecommendationReasoning = async (
 ): Promise<GameRecommendation[]> => {
   // Create the model with structured output
   const modelConfig = loadModelConfig();
-  const modelManager = new ModelManager();
-  const model = modelManager.createModel(modelConfig);
-  const structuredModel = modelManager.withStructuredOutput(model, finalRecommendationsSchema);
-
-  // Create a prompt template for enhancing reasoning
-  const prompt = ChatPromptTemplate.fromTemplate(`
-You are an expert game recommendation specialist. Your task is to enhance the reasoning for each game recommendation to clearly explain why each game matches the user's request.
-
-User's Original Request: {userRequest}
-
-Current Game Recommendations:
-{gameRecommendations}
-
-Instructions:
-- Enhance the reasoning for each game to explain why it's a perfect match for the user's request
-- Make the reasoning personal and specific to what the user asked for
-- Highlight unique features, gameplay elements, or aspects that directly address the user's preferences
-- Include information about pricing/discounts if available and relevant
-- Keep the reasoning concise and to the point (3 sentences maximum)
-- Maintain all existing game information (name, description, platforms, pricing, etc.)
-- Return the top 5 recommendations with the best reasoning
-
-Return the enhanced recommendations with improved reasoning:
-`);
+  const structuredModel = createStructuredOpenRouterModel(modelConfig, finalRecommendationsSchema);
 
   try {
-    const chain = prompt.pipe(structuredModel);
-    const response = await chain.invoke({
+    const promptContents = await prompt.invoke({
       userRequest,
       gameRecommendations: JSON.stringify(gameRecommendations, null, 2),
     });
+    const response = await structuredModel.invoke(promptContents);
 
     const parsed = finalRecommendationsSchema.parse(response);
     return parsed.recommendations;
@@ -96,9 +94,7 @@ const selectTopRecommendations = async (
 ): Promise<GameRecommendation[]> => {
   // Create the model with structured output
   const modelConfig = loadModelConfig();
-  const modelManager = new ModelManager();
-  const model = modelManager.createModel(modelConfig);
-  const structuredModel = modelManager.withStructuredOutput(model, finalRecommendationsSchema);
+  const structuredModel = createStructuredOpenRouterModel(modelConfig, finalRecommendationsSchema);
 
   // Create a prompt template for selecting and enhancing recommendations
   const prompt = ChatPromptTemplate.fromTemplate(`

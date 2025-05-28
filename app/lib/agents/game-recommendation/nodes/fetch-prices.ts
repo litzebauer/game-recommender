@@ -1,4 +1,4 @@
-import { PriceInfoTool } from '../../../../tools/priceInfo';
+import { PriceInfoTool } from '../../../tools/priceInfo';
 import { GameRecommendation } from '../../../schemas/gameRecommendation';
 import { GameRecommendationState } from '../state';
 
