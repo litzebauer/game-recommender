@@ -3,12 +3,20 @@ import { Button } from '@/components/ui/button';
 import { Tag, Star } from 'lucide-react';
 import { GameRecommendation } from '../lib/schemas/gameRecommendation';
 import placeholderImage from '/placeholder.svg?url';
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from './ui/tooltip';
 
 interface GameCardProps {
   gameRecommendation: GameRecommendation;
 }
 
+const MAX_VISIBLE_TAGS = 6;
+
 const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
+  const tags = gameRecommendation.game.tags || [];
+  const visibleTags = tags.slice(0, MAX_VISIBLE_TAGS);
+  const remainingTags = tags.slice(MAX_VISIBLE_TAGS);
+  const hasMoreTags = remainingTags.length > 0;
+
   return (
     <div className="group rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/15 hover:shadow-2xl">
       <div className="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-600 to-teal-600">
@@ -33,15 +41,39 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
       </p>
 
       <div className="mb-4 flex flex-wrap gap-2">
-        {gameRecommendation.game.tags?.map((tag, index) => (
-          <span
-            key={index}
-            className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-600/20 px-3 py-1 text-xs text-blue-300"
-          >
+        {visibleTags.map((tag, index) => (
+          <span key={index} className="game-tag">
             <Tag size={12} className="mr-1" />
             {tag}
           </span>
         ))}
+        {hasMoreTags && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="inline-flex items-center rounded-full border border-gray-500/30 bg-gray-600/20 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-500/30">
+                +{tags.length - MAX_VISIBLE_TAGS} More
+              </span>
+            </TooltipTrigger>
+            <TooltipPortal>
+              <TooltipContent
+                className="z-9999 max-w-md rounded-lg border-gray-700/50 bg-gray-900/95 p-3 shadow-xl backdrop-blur-sm"
+                sideOffset={8}
+              >
+                <div className="space-y-1">
+                  <p className="mb-2 text-xs font-medium text-gray-300">Additional Tags:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {remainingTags.map((tag, index) => (
+                      <span key={index} className="game-tag">
+                        <Tag size={12} className="mr-1" />
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </TooltipContent>
+            </TooltipPortal>
+          </Tooltip>
+        )}
       </div>
 
       <div className="mb-4 rounded-xl border border-teal-500/30 bg-teal-600/20 p-3">

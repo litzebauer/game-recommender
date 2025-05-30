@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
 import appCss from '@/styles/app.css?url';
 import NotFound from '../components/NotFound';
+import { TooltipProvider } from '../components/ui/tooltip';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -31,7 +32,9 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <Outlet />
+      <TooltipProvider>
+        <Outlet />
+      </TooltipProvider>
     </RootDocument>
   );
 }
