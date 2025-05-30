@@ -68,7 +68,7 @@ const createRecommendationsFromGames = async (
   }
 
   // Create the model with structured output
-  const modelConfig = loadModelConfig();
+  const modelConfig = loadModelConfig(process.env.GENERATE_RECOMMENDATIONS_MODEL);
   const structuredModel = createStructuredOpenRouterModel(modelConfig, finalRecommendationsSchema);
 
   try {

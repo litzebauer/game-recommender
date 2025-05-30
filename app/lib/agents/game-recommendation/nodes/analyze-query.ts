@@ -31,7 +31,7 @@ export async function analyzeQuery(state: GameRecommendationState) {
 
 const generateSearchQuery = async (userRequest: string): Promise<string> => {
   // Create the model
-  const modelConfig = loadModelConfig();
+  const modelConfig = loadModelConfig(process.env.ANALYZE_QUERY_MODEL);
   const model = createOpenRouterModel(modelConfig);
 
   const templateContents = await prompt.invoke({ userRequest });
