@@ -1,4 +1,4 @@
-import { ZodTypeAny, z } from 'zod';
+import { ZodTypeAny } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
 /**

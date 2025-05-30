@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
@@ -19,32 +18,32 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSearch, isLoading }
   };
 
   const examplePrompts = [
-    "I want a relaxing game to play after work",
-    "Looking for a co-op game to play with friends",
-    "I love RPGs with deep storylines",
-    "Need a challenging puzzle game",
-    "Want something like Dark Souls but easier"
+    'I want a relaxing game to play after work',
+    'Looking for a co-op game to play with friends',
+    'I love RPGs with deep storylines',
+    'Need a challenging puzzle game',
+    'Want something like Dark Souls but easier',
   ];
 
   return (
-    <div className="max-w-4xl mx-auto mb-12">
+    <div className="mx-auto mb-12 max-w-4xl">
       <form onSubmit={handleSubmit} className="relative mb-8">
         <div className="relative">
           <textarea
             value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            onChange={e => setPrompt(e.target.value)}
             placeholder="Describe what kind of game you're looking for... (e.g., 'I want a relaxing farming game' or 'Looking for a challenging platformer with great music')"
-            className="w-full h-32 px-6 py-4 text-lg bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+            className="h-32 w-full resize-none rounded-2xl border border-white/20 bg-white/10 px-6 py-4 text-lg text-white placeholder-gray-400 backdrop-blur-md transition-all duration-300 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
             disabled={isLoading}
           />
           <Button
             type="submit"
             disabled={!prompt.trim() || isLoading}
-            className="absolute bottom-4 right-4 bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white border-0 rounded-xl px-6 py-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute right-4 bottom-4 rounded-xl border-0 bg-gradient-to-r from-blue-600 to-teal-600 px-6 py-2 text-white transition-all duration-300 hover:from-blue-700 hover:to-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                 <span>Searching...</span>
               </div>
             ) : (
@@ -58,14 +57,14 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSearch, isLoading }
       </form>
 
       <div className="text-center">
-        <p className="text-gray-400 mb-4">Try one of these examples:</p>
+        <p className="mb-4 text-gray-400">Try one of these examples:</p>
         <div className="flex flex-wrap justify-center gap-3">
           {examplePrompts.map((example, index) => (
             <button
               key={index}
               onClick={() => setPrompt(example)}
               disabled={isLoading}
-              className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/20 rounded-full text-gray-300 text-sm transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm text-gray-300 transition-all duration-300 hover:scale-105 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
             >
               "{example}"
             </button>
