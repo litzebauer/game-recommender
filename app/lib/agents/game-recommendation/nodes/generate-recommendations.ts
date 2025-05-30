@@ -1,5 +1,9 @@
 import { GameRecommendationState } from '../state';
-import { GameRecommendation, gameRecommendationSchema } from '../../../schemas/gameRecommendation';
+import {
+  GameRecommendation,
+  gameRecommendationSchema,
+  gameSchema,
+} from '../../../schemas/gameRecommendation';
 import { Game } from '../../../schemas/gameRecommendation';
 import { createStructuredOpenRouterModel } from '../../../models/openrouter';
 import { loadModelConfig } from '../../../config/modelConfig';
@@ -11,7 +15,14 @@ const MAX_RECOMMENDATIONS = 6;
 
 // Schema for the final recommendation selection
 const finalRecommendationsSchema = z.object({
-  recommendations: z.array(gameRecommendationSchema).max(MAX_RECOMMENDATIONS),
+  recommendations: z
+    .array(
+      z.object({
+        gameId: gameSchema.shape.id,
+        reasoning: gameRecommendationSchema.shape.reasoning,
+      })
+    )
+    .max(MAX_RECOMMENDATIONS),
 });
 
 const schemaPrompt = zodSchemaToPromptDescription(finalRecommendationsSchema);
@@ -25,8 +36,8 @@ const prompt = ChatPromptTemplate.fromTemplate(`
     {gameDescriptions}
     
     Instructions:
-    - Select the TOP 5 most relevant games from the provided list
-    - For each selected game, provide compelling reasoning (2-3 sentences) that explains:
+    - Select the TOP ${MAX_RECOMMENDATIONS} most relevant games from the provided list
+    - For each selected game, provide concise and compelling reasoning (2-3 sentences) that explains:
       * Why this game perfectly matches what the user is looking for
       * What unique features or gameplay elements make it special
       * How it addresses the specific preferences mentioned in the user's request
@@ -79,7 +90,7 @@ const createRecommendationsFromGames = async (
     const response = await structuredModel.invoke(promptContents);
 
     const parsed = finalRecommendationsSchema.parse(response);
-    return parsed.recommendations;
+    return mapRecommendationsToGames(parsed.recommendations, games);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error generating game recommendations:', error);
@@ -90,4 +101,20 @@ const createRecommendationsFromGames = async (
       reasoning: `${game.name} appears to be a relevant game based on your request. It offers ${game.genre || 'various gameplay elements'} and could be a good match for your preferences.`,
     }));
   }
+};
+
+const mapRecommendationsToGames = (
+  recommendations: Array<{ gameId: string; reasoning: string }>,
+  games: Game[]
+): GameRecommendation[] => {
+  return recommendations.map(recommendation => {
+    const game = games.find(game => game.id === recommendation.gameId);
+    if (!game) {
+      throw new Error(`Game with id ${recommendation.gameId} not found`);
+    }
+    return {
+      game,
+      reasoning: recommendation.reasoning,
+    };
+  });
 };
