@@ -20,7 +20,7 @@ export async function searchGames(
   });
 
   return {
-    rawSearchResults: results.results
+    rawSearchResults: (results.results ?? [])
       .filter(result => result.score >= 0.4)
       .map(result => result.content),
   };

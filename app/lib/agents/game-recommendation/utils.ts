@@ -1,5 +1,6 @@
 import { ZodTypeAny } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
+import { z } from 'zod';
 
 /**
  * Generates a consistent game ID from a game name
@@ -10,6 +11,9 @@ export const generateGameId = (gameName: string): string => {
   return gameName.toLowerCase().replace(/[^a-z0-9]/g, '-');
 };
 
+/**
+ * Converts a Zod schema into a prompt-friendly string describing the expected output format.
+ */
 /**
  * Converts a Zod schema into a prompt-friendly string describing the expected output format.
  */
@@ -26,4 +30,34 @@ export function zodSchemaToPromptDescription(schema: ZodTypeAny): string {
     escapedJsonSchema +
     '\nIMPORTANT: You MUST respond with valid JSON only. Do not include any explanation or text outside the JSON structure.'
   );
+}
+
+export function isValidGameData(game: any): boolean {
+  return (
+    game &&
+    typeof game.id === 'string' &&
+    typeof game.name === 'string' &&
+    game.id.length > 0 &&
+    game.name.length > 0
+  );
+}
+
+export function calculateDataCompleteness(games: any[]): number {
+  if (!games || games.length === 0) return 0;
+
+  let totalScore = 0;
+  for (const game of games) {
+    let gameScore = 0;
+    const fields = ['id', 'name', 'description', 'genre', 'currentPrice', 'imageUrl'];
+
+    for (const field of fields) {
+      if (game[field] && game[field] !== '') {
+        gameScore += 1;
+      }
+    }
+
+    totalScore += gameScore / fields.length;
+  }
+
+  return totalScore / games.length;
 }

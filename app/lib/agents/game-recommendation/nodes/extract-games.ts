@@ -1,8 +1,9 @@
+import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { z } from 'zod';
 import { GameRecommendationState } from '../state';
 import { createStructuredOpenRouterModel } from '../../../models/openrouter';
 import { loadModelConfig } from '../../../config/modelConfig';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { z } from 'zod';
+import { generateGameId } from '../utils';
 
 // Create a prompt template for extracting game names
 const prompt = ChatPromptTemplate.fromTemplate(`
@@ -32,9 +33,12 @@ export async function extractGames(
   state: GameRecommendationState
 ): Promise<Partial<GameRecommendationState>> {
   const gameNames = await parseGameNamesFromResults(state.rawSearchResults!);
+  const existingGamesSet = new Set(state.games?.map(game => game.id));
+  // Filter out games that already exist in the state
+  const newGameNames = gameNames.filter(name => !existingGamesSet.has(generateGameId(name)));
 
   return {
-    gameNames,
+    gameNames: newGameNames,
     rawSearchResults: undefined, // Clear to save tokens
   };
 }

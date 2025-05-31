@@ -12,6 +12,24 @@ export interface GamePriceInfo
   name: string;
 }
 
+// Quality assessment interface
+export interface QualityAssessment {
+  searchResultsQuality: 'excellent' | 'good' | 'poor' | 'insufficient';
+  gameDataCompleteness: number; // 0-1 score
+  recommendationConfidence: number; // 0-1 score
+  needsRefinement: boolean;
+  issues: string[];
+}
+
+// Decision flags for agentic behavior
+export interface DecisionFlags {
+  shouldRetrySearch: boolean;
+  shouldExpandSearch: boolean;
+  shouldUseAlternativeStrategy: boolean;
+  isComplexQuery: boolean;
+  requiresSpecializedSearch: boolean;
+}
+
 export const AgentState = Annotation.Root({
   userRequest: Annotation<string>,
   searchQuery: Annotation<string>,
@@ -21,4 +39,11 @@ export const AgentState = Annotation.Root({
   gamePriceInfo: Annotation<GamePriceInfo[]>,
   gameRecommendations: Annotation<GameRecommendation[]>,
   games: Annotation<Game[]>,
+
+  // Agentic decision-making fields
+  qualityAssessment: Annotation<QualityAssessment>,
+  decisionFlags: Annotation<DecisionFlags>,
+  retryCount: Annotation<number>,
+  alternativeSearchQueries: Annotation<string[]>,
+  searchStrategy: Annotation<'standard' | 'broad' | 'specific' | 'multi-query'>,
 });
