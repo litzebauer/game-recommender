@@ -10,6 +10,23 @@ interface GameCardProps {
 
 const MAX_VISIBLE_TAGS = 6;
 
+// Helper function to format prices as USD currency
+const formatPrice = (price: number | string | null | undefined): string => {
+  if (price === null || price === undefined) {
+    return '$0.00';
+  }
+  const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+  if (isNaN(numericPrice)) {
+    return '$0.00';
+  }
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(numericPrice);
+};
+
 const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
   const tags = gameRecommendation.game.tags || [];
   const visibleTags = tags.slice(0, MAX_VISIBLE_TAGS);
@@ -93,16 +110,16 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
                   -{gameRecommendation.game.discount}%
                 </span>
                 <span className="text-sm text-gray-400 line-through">
-                  ${gameRecommendation.game.originalPrice}
+                  {formatPrice(gameRecommendation.game.originalPrice)}
                 </span>
               </div>
               <div className="text-2xl font-bold text-green-400">
-                ${gameRecommendation.game.currentPrice}
+                {formatPrice(gameRecommendation.game.currentPrice)}
               </div>
             </div>
           ) : (
             <div className="text-2xl font-bold text-white">
-              ${gameRecommendation.game.currentPrice}
+              {formatPrice(gameRecommendation.game.currentPrice)}
             </div>
           )}
         </div>
