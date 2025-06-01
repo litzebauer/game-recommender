@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tag, Star } from 'lucide-react';
 import { GameRecommendation } from '../lib/schemas/gameRecommendation';
-import placeholderImage from '/placeholder.svg?url';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from './ui/tooltip';
 
 interface GameCardProps {
@@ -21,7 +20,7 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
     <div className="group rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/15 hover:shadow-2xl">
       <div className="mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-600 to-teal-600">
         <img
-          src={gameRecommendation.game.imageUrl ?? placeholderImage}
+          src={gameRecommendation.game.imageUrl ?? '/placeholder.svg'}
           alt={gameRecommendation.game.name}
           className="h-full w-full object-cover"
           onError={e => {
