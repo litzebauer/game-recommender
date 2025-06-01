@@ -43,13 +43,13 @@ export function routeAfterQualityAssessment(state: GameRecommendationState): str
   return 'recommend';
 }
 
-export function routeAfterAnalysis(state: GameRecommendationState): string {
+export function routeAfterAnalysis(): string {
   // For multi-query strategy, we might want to handle differently in the future
   // For now, all strategies go to search
   return 'search';
 }
 
-export function routeAfterCombine(state: GameRecommendationState): string {
+export function routeAfterCombine(): string {
   // Always assess quality after combining data
   return 'assess-quality';
 }

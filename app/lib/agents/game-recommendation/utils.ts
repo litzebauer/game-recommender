@@ -1,6 +1,5 @@
 import { ZodTypeAny } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import { z } from 'zod';
 
 /**
  * Generates a consistent game ID from a game name
