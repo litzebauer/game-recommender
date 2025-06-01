@@ -30,10 +30,10 @@ flowchart TD
     recommend --> END([END])
 
     %% Styling
-    classDef startEnd fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef coreNode fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef agenticNode fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    classDef decision fill:#ffebee,stroke:#c62828,stroke-width:2px
+    classDef startEnd fill:#2196f3,stroke:#0d47a1,stroke-width:3px,color:#ffffff
+    classDef coreNode fill:#9c27b0,stroke:#4a148c,stroke-width:2px,color:#ffffff
+    classDef agenticNode fill:#ff9800,stroke:#e65100,stroke-width:2px,color:#ffffff
+    classDef decision fill:#f44336,stroke:#b71c1c,stroke-width:2px,color:#ffffff
 
     class START,END startEnd
     class assess_complexity,analyze,search,extract,describe,price,combine,recommend coreNode
