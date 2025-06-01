@@ -45,7 +45,7 @@ export async function extractGames(
 
 const parseGameNamesFromResults = async (rawSearchResults: string[]): Promise<string[]> => {
   // Create the model with structured output
-  const modelConfig = loadModelConfig();
+  const modelConfig = loadModelConfig(process.env.EXTRACT_GAMES_MODEL);
   const structuredModel = createStructuredOpenRouterModel(modelConfig, gameNamesSchema);
 
   try {

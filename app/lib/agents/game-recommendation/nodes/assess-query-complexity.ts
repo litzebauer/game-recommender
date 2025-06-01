@@ -57,7 +57,7 @@ const QueryAnalysisSchema = z.object({
 });
 
 const analyzeQueryComplexity = async (userRequest: string): Promise<QueryAnalysis> => {
-  const modelConfig = loadModelConfig(process.env.ANALYZE_QUERY_MODEL);
+  const modelConfig = loadModelConfig(process.env.ASSESS_QUERY_MODEL);
   const model = withStructuredOutput(createOpenRouterModel(modelConfig), QueryAnalysisSchema);
 
   try {

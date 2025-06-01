@@ -62,7 +62,7 @@ const SearchRefinementSchema = z.object({
 type SearchRefinement = z.infer<typeof SearchRefinementSchema>;
 
 const generateRefinedSearch = async (state: GameRecommendationState): Promise<SearchRefinement> => {
-  const modelConfig = loadModelConfig(process.env.ANALYZE_QUERY_MODEL);
+  const modelConfig = loadModelConfig(process.env.REFINE_SEARCH_MODEL);
   const model = withStructuredOutput(createOpenRouterModel(modelConfig), SearchRefinementSchema);
 
   try {

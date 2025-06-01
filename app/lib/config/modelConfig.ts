@@ -7,7 +7,7 @@ dotenv.config({ path: '.env.config' });
 dotenv.config({ path: '.env' });
 
 // Default model configurations
-const DEFAULT_MODEL_NAME = 'anthropic/claude-3.7-sonnet';
+const DEFAULT_MODEL_NAME = 'anthropic/claude-3.5-haiku';
 const DEFAULT_TEMPERATURE = 0;
 const DEFAULT_MAX_TOKENS = 4096;
 const DEFAULT_VERBOSE = false;

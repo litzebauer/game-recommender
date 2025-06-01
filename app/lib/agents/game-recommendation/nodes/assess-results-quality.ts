@@ -56,7 +56,7 @@ export async function assessResultsQuality(
 }
 
 const evaluateQuality = async (state: GameRecommendationState): Promise<QualityAssessment> => {
-  const modelConfig = loadModelConfig(process.env.ANALYZE_QUERY_MODEL);
+  const modelConfig = loadModelConfig(process.env.ASSESS_RESULTS_MODEL);
   const model = createOpenRouterModel(modelConfig);
 
   try {
