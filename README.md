@@ -201,6 +201,20 @@ game-recommender-chatbot/
 └── openapi/            # OpenAPI specifications
 ```
 
+### AI Agent Architecture
+
+The core game recommendation logic is powered by a LangGraph agent that orchestrates multiple AI models and external APIs. For a detailed visual representation of the agent workflow, see the [Game Recommendation Graph Diagram](./game-recommendation-graph-diagram.md).
+
+The agent follows a sophisticated multi-step process:
+
+1. **Query Analysis** - Understands user intent and requirements
+2. **Game Search** - Searches external APIs for relevant games
+3. **Data Enrichment** - Fetches detailed descriptions and pricing
+4. **Quality Assessment** - Evaluates results and decides whether to refine the search
+5. **Recommendation Generation** - Creates personalized recommendations
+
+This architecture enables the system to provide high-quality, contextual game recommendations while adapting to different query complexities and result qualities.
+
 ## 🧪 Development
 
 ### Available Scripts
