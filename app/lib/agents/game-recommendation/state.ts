@@ -45,5 +45,5 @@ export const AgentState = Annotation.Root({
   decisionFlags: Annotation<DecisionFlags>,
   retryCount: Annotation<number>,
   alternativeSearchQueries: Annotation<string[]>,
-  searchStrategy: Annotation<'standard' | 'broad' | 'specific' | 'multi-query'>,
+  searchStrategy: Annotation<'standard' | 'broad' | 'specific'>,
 });

@@ -8,7 +8,7 @@ flowchart TD
 
     assess_complexity --> analyze[analyze]
 
-    analyze --> |routeAfterAnalysis| search[search]
+    analyze --> search[search]
 
     search --> extract[extract]
 
@@ -18,7 +18,7 @@ flowchart TD
     describe --> combine[combine-game-data]
     price --> combine
 
-    combine --> |routeAfterCombine| assess_quality[assess-quality]
+    combine --> assess_quality[assess-quality]
 
     assess_quality --> |routeAfterQualityAssessment| decision{Quality Assessment Decision}
 
@@ -61,11 +61,9 @@ flowchart TD
 
 ### Decision Logic
 
-The graph includes three main conditional routing points:
+The graph includes one main conditional routing point:
 
-1. **After Analysis** (`routeAfterAnalysis`): Currently always routes to 'search'
-2. **After Combine** (`routeAfterCombine`): Always routes to 'assess-quality'
-3. **After Quality Assessment** (`routeAfterQualityAssessment`): Routes based on:
+1. **After Quality Assessment** (`routeAfterQualityAssessment`): Routes based on:
    - **To refine-search** if any of these conditions are true:
      - `shouldRetrySearch`: Need to retry with different parameters
      - `shouldExpandSearch`: Need to expand search scope

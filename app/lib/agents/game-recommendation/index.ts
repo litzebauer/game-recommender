@@ -10,11 +10,7 @@ import { generateRecommendations } from './nodes/generate-recommendations';
 import { assessQueryComplexity } from './nodes/assess-query-complexity';
 import { assessResultsQuality } from './nodes/assess-results-quality';
 import { refineSearch } from './nodes/refine-search';
-import {
-  routeAfterQualityAssessment,
-  routeAfterAnalysis,
-  routeAfterCombine,
-} from './nodes/decision-router';
+import { routeAfterQualityAssessment } from './nodes/decision-router';
 import { GameRecommendation } from '../../schemas/gameRecommendation';
 
 function createGameRecommendationGraph() {
@@ -36,10 +32,8 @@ function createGameRecommendationGraph() {
   // Initial flow: assess complexity then analyze
   workflow.addEdge(START, 'assess-complexity').addEdge('assess-complexity', 'analyze');
 
-  // Conditional routing after analysis
-  workflow.addConditionalEdges('analyze', routeAfterAnalysis, {
-    search: 'search',
-  });
+  // Direct routing after analysis
+  workflow.addEdge('analyze', 'search');
 
   // Standard data processing flow
   workflow
@@ -50,9 +44,7 @@ function createGameRecommendationGraph() {
     .addEdge('price', 'combine');
 
   // Quality assessment after combining data
-  workflow.addConditionalEdges('combine', routeAfterCombine, {
-    'assess-quality': 'assess-quality',
-  });
+  workflow.addEdge('combine', 'assess-quality');
 
   // Agentic decision making after quality assessment
   workflow.addConditionalEdges('assess-quality', routeAfterQualityAssessment, {

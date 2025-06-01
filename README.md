@@ -54,7 +54,7 @@ The agent follows a sophisticated multi-step process:
 4. **Quality Assessment** - Evaluates results and decides whether to refine the search
 5. **Recommendation Generation** - Creates personalized recommendations
 
-This architecture enables the system to provide high-quality, contextual game recommendations while adapting to different query complexities and result qualities.
+This architecture enables the system to provide high-quality, contextual game recommendations while adapting to different query complexities and result qualities. The workflow has been optimized to use direct routing where no decision logic is needed, reducing complexity while maintaining full functionality.
 
 ## 🚀 Getting Started
 

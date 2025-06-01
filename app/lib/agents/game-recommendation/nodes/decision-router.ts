@@ -24,32 +24,15 @@ export function shouldProceedToRecommendations(state: GameRecommendationState): 
 }
 
 export function routeAfterQualityAssessment(state: GameRecommendationState): string {
-  // If we should retry search, go to refine-search
-  if (shouldRetrySearch(state)) {
-    return 'refine-search';
-  }
-
-  // If we should expand search, go to refine-search with expansion
-  if (shouldExpandSearch(state)) {
-    return 'refine-search';
-  }
-
-  // If we should use alternative strategy, go to refine-search
-  if (shouldUseAlternativeStrategy(state)) {
+  // If we should retry search, expand search, or use alternative strategy, go to refine-search
+  if (
+    shouldRetrySearch(state) ||
+    shouldExpandSearch(state) ||
+    shouldUseAlternativeStrategy(state)
+  ) {
     return 'refine-search';
   }
 
   // Otherwise proceed to recommendations
   return 'recommend';
-}
-
-export function routeAfterAnalysis(): string {
-  // For multi-query strategy, we might want to handle differently in the future
-  // For now, all strategies go to search
-  return 'search';
-}
-
-export function routeAfterCombine(): string {
-  // Always assess quality after combining data
-  return 'assess-quality';
 }
