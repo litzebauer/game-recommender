@@ -98,6 +98,12 @@ A modern, AI-powered game recommendation chatbot that helps users discover their
    OPENROUTER_REFERER=http://localhost:3000        # Referer header for OpenRouter requests
    OPENROUTER_TITLE=Game Recommender Chatbot       # Title for OpenRouter requests
 
+   # LangSmith Configuration (for observability and debugging)
+   LANGSMITH_TRACING=true                       # Enable LangSmith tracing
+   LANGSMITH_API_KEY=your_langsmith_api_key_here   # LangSmith API key
+   LANGSMITH_PROJECT=game-recommender              # Project name in LangSmith
+   LANGSMITH_ENDPOINT=https://api.smith.langchain.com  # LangSmith API endpoint
+
    # Agent-Specific Model Overrides
    ANALYZE_QUERY_MODEL=anthropic/claude-3.5-haiku      # Model for query analysis
    ASSESS_QUERY_MODEL=anthropic/claude-3.5-haiku       # Model for query assessment
@@ -133,10 +139,26 @@ A modern, AI-powered game recommendation chatbot that helps users discover their
 2. Create a free account
 3. Get your API key from the dashboard
 
-#### ITAD API Key (Optional)
+#### ITAD API Key
 
 1. Visit [IsThereAnyDeal API](https://itad.docs.apiary.io/)
 2. Follow their documentation to get an API key
+
+#### LangSmith API Key (Optional)
+
+1. Visit [LangSmith](https://smith.langchain.com/)
+2. Create an account or sign in with your existing LangChain account
+3. Navigate to the Settings or API Keys section
+4. Create a new API key
+5. Set up a project name (e.g., "game-recommender") to organize your traces
+6. Enable tracing by setting `LANGSMITH_TRACING=true` in your environment variables
+
+LangSmith provides powerful observability features for your AI workflows:
+
+- **Trace Visualization**: See how queries flow through your LangGraph agents
+- **Performance Monitoring**: Track latency and token usage for each model call
+- **Debugging Tools**: Inspect inputs, outputs, and intermediate steps
+- **Cost Analysis**: Monitor API usage and costs across different models
 
 ## 📖 Usage
 
