@@ -5,7 +5,7 @@ import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { zodSchemaToPromptDescription } from '../utils';
 import { z } from 'zod';
 
-const prompt = ChatPromptTemplate.fromTemplate(`
+const promptTemplate = ChatPromptTemplate.fromTemplate(`
     You are an expert at refining search strategies for game recommendations when initial results are insufficient.
     
     Original User Request: {userRequest}
@@ -66,7 +66,7 @@ const generateRefinedSearch = async (state: GameRecommendationState): Promise<Se
   const model = withStructuredOutput(createOpenRouterModel(modelConfig), SearchRefinementSchema);
 
   try {
-    const templateContents = await prompt.invoke({
+    const prompt = await promptTemplate.invoke({
       userRequest: state.userRequest,
       previousSearchQuery: state.searchQuery || 'No previous query',
       searchStrategy: state.searchStrategy || 'standard',
@@ -75,7 +75,7 @@ const generateRefinedSearch = async (state: GameRecommendationState): Promise<Se
       promptSchema: zodSchemaToPromptDescription(SearchRefinementSchema),
     });
 
-    const response = await model.invoke(templateContents);
+    const response = await model.invoke(prompt);
 
     return response;
   } catch (error) {

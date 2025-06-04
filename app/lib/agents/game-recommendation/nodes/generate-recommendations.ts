@@ -29,7 +29,7 @@ const finalRecommendationsSchema = z.object({
 
 const schemaPrompt = zodSchemaToPromptDescription(finalRecommendationsSchema);
 // Create a prompt template for generating game recommendations with reasoning
-const prompt = ChatPromptTemplate.fromTemplate(`
+const promptTemplate = ChatPromptTemplate.fromTemplate(`
     You are an expert game recommendation specialist. Your task is to create compelling game recommendations with detailed reasoning for why each game matches the user's request.
     
     User's Original Request: {userRequest}
@@ -86,11 +86,11 @@ const createRecommendationsFromGames = async (
   const structuredModel = createStructuredOpenRouterModel(modelConfig, finalRecommendationsSchema);
 
   try {
-    const promptContents = await prompt.invoke({
+    const prompt = await promptTemplate.invoke({
       userRequest,
       gameDescriptions: JSON.stringify(games, null, 2),
     });
-    const response = await structuredModel.invoke(promptContents);
+    const response = await structuredModel.invoke(prompt);
 
     const parsed = finalRecommendationsSchema.parse(response);
     return mapRecommendationsToGames(parsed.recommendations, games);

@@ -6,7 +6,7 @@ import { loadModelConfig } from '../../../config/modelConfig';
 import { generateGameId } from '../utils';
 
 // Create a prompt template for extracting game names
-const prompt = ChatPromptTemplate.fromTemplate(`
+const promptTemplate = ChatPromptTemplate.fromTemplate(`
     You are an expert at analyzing gaming content and extracting game names.
     
     Your task is to analyze the provided search results about video games and extract just the names of games that seem worth recommending.
@@ -49,8 +49,8 @@ const parseGameNamesFromResults = async (rawSearchResults: string[]): Promise<st
   const structuredModel = createStructuredOpenRouterModel(modelConfig, gameNamesSchema);
 
   try {
-    const promptContents = await prompt.invoke({ rawSearchResults });
-    const response = await structuredModel.invoke(promptContents);
+    const prompt = await promptTemplate.invoke({ rawSearchResults });
+    const response = await structuredModel.invoke(prompt);
 
     // Extract the gameNames array from the response object
     const parsed = gameNamesSchema.parse(response);

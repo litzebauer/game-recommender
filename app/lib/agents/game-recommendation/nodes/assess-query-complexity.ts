@@ -5,7 +5,7 @@ import { createOpenRouterModel, withStructuredOutput } from '../../../models/ope
 import { loadModelConfig } from '../../../config/modelConfig';
 import { zodSchemaToPromptDescription } from '../utils';
 
-const prompt = ChatPromptTemplate.fromTemplate(`
+const promptTemplate = ChatPromptTemplate.fromTemplate(`
     You are an expert at analyzing game recommendation requests to determine their complexity and requirements.
     
     Analyze the following user request and determine:
@@ -61,11 +61,11 @@ const analyzeQueryComplexity = async (userRequest: string): Promise<QueryAnalysi
   const model = withStructuredOutput(createOpenRouterModel(modelConfig), QueryAnalysisSchema);
 
   try {
-    const templateContents = await prompt.invoke({
+    const prompt = await promptTemplate.invoke({
       userRequest,
       promptSchema: zodSchemaToPromptDescription(QueryAnalysisSchema),
     });
-    const response = await model.invoke(templateContents);
+    const response = await model.invoke(prompt);
 
     return response;
   } catch (error) {

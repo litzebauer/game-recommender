@@ -4,7 +4,7 @@ import { loadModelConfig } from '../../../config/modelConfig';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 // Create a prompt template for generating search queries based on strategy
-const prompt = ChatPromptTemplate.fromTemplate(`
+const promptTemplate = ChatPromptTemplate.fromTemplate(`
     You are an expert at analyzing game recommendation requests and generating optimal search queries.
 
     Your task is to analyze the user's request and convert it into a single, unified search query that will help find relevant video games.
@@ -59,13 +59,13 @@ const generateSearchQuery = async (
   const modelConfig = loadModelConfig(process.env.ANALYZE_QUERY_MODEL);
   const model = createOpenRouterModel(modelConfig);
 
-  const templateContents = await prompt.invoke({
+  const prompt = await promptTemplate.invoke({
     userRequest,
     searchStrategy: strategy,
     isComplexQuery,
     requiresSpecializedSearch,
   });
-  const response = await model.invoke(templateContents);
+  const response = await model.invoke(prompt);
 
   // Extract the content from the response
   const searchQuery =

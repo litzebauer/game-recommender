@@ -3,7 +3,7 @@ import { createOpenRouterModel } from '../../../models/openrouter';
 import { loadModelConfig } from '../../../config/modelConfig';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
-const prompt = ChatPromptTemplate.fromTemplate(`
+const promptTemplate = ChatPromptTemplate.fromTemplate(`
     You are an expert at evaluating the quality of game search results and data completeness.
     
     Evaluate the following data for a game recommendation request:
@@ -69,7 +69,7 @@ const evaluateQuality = async (state: GameRecommendationState): Promise<QualityA
       { descriptionsCount: 0, pricesCount: 0, gamesCount: state.games?.length || 0 }
     );
 
-    const templateContents = await prompt.invoke({
+    const prompt = await promptTemplate.invoke({
       userRequest: state.userRequest,
       searchQuery: state.searchQuery || 'No search query',
       gamesCount: counts.gamesCount || 0,
@@ -77,7 +77,7 @@ const evaluateQuality = async (state: GameRecommendationState): Promise<QualityA
       pricesCount: counts.pricesCount || 0,
     });
 
-    const response = await model.invoke(templateContents);
+    const response = await model.invoke(prompt);
     const content =
       typeof response.content === 'string'
         ? response.content.trim()
