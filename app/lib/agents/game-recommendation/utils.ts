@@ -13,9 +13,6 @@ export const generateGameId = (gameName: string): string => {
 /**
  * Converts a Zod schema into a prompt-friendly string describing the expected output format.
  */
-/**
- * Converts a Zod schema into a prompt-friendly string describing the expected output format.
- */
 export function zodSchemaToPromptDescription(schema: ZodTypeAny): string {
   const jsonSchema = zodToJsonSchema(schema);
 
