@@ -25,10 +25,10 @@ const prompt = ChatPromptTemplate.fromTemplate(`
     }}
     
     Quality Guidelines:
-    - Excellent: 8+ relevant games, complete data, perfect match to request
-    - Good: 5-7 relevant games, mostly complete data, good match
-    - Poor: 2-4 games, incomplete data, partial match
-    - Insufficient: <2 games or very poor relevance
+    - Excellent: 9+ relevant games, complete data, perfect match to request
+    - Good: 6-8 relevant games, mostly complete data, good match
+    - Poor: 3-5 games, incomplete data, partial match
+    - Insufficient: <3 games or very poor relevance
     
     Data Completeness: Ratio of complete game records (with descriptions, prices, etc.)
     Recommendation Confidence: How confident you are that these results will satisfy the user

@@ -18,8 +18,10 @@ const finalRecommendationsSchema = z.object({
   recommendations: z
     .array(
       z.object({
-        gameId: gameSchema.shape.id,
-        reasoning: gameRecommendationSchema.shape.reasoning,
+        gameId: gameSchema.shape.id.describe('EXACT_GAME_ID_FROM_INPUT'),
+        reasoning: gameRecommendationSchema.shape.reasoning.describe(
+          "Why this game matches the user's request."
+        ),
       })
     )
     .max(MAX_RECOMMENDATIONS),
@@ -32,11 +34,14 @@ const prompt = ChatPromptTemplate.fromTemplate(`
     
     User's Original Request: {userRequest}
     
-    Available Games:
+    Available Games (see full list below):
+    Each game object has a unique \`"id"\` field. You must only use the exact value from the \`"id"\` field when creating recommendations.
     {gameDescriptions}
     
     Instructions:
     - Select the TOP ${MAX_RECOMMENDATIONS} most relevant games from the provided list
+    - Do not invent or modify game IDS.
+    - Use the \`"id"\` field of each game as the \`gameId\` in your output.
     - For each selected game, provide concise and compelling reasoning (2-3 sentences) that explains:
       * Why this game perfectly matches what the user is looking for
       * What unique features or gameplay elements make it special
@@ -46,8 +51,6 @@ const prompt = ChatPromptTemplate.fromTemplate(`
     - Consider factors like: relevance to user request, game quality, availability, pricing value
     - Ensure recommendations offer different gaming experiences when possible
     
-    Return exactly ${MAX_RECOMMENDATIONS} game recommendations with detailed reasoning.
-
     ${schemaPrompt}
     `);
 
