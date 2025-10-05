@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import { BrandButton } from '@/components/BrandButton';
+import { PillButton } from '@/components/PillButton';
+import { SearchTextarea } from '@/components/SearchTextarea';
 import { Loader2, Search } from 'lucide-react';
 
 interface SearchInterfaceProps {
@@ -30,17 +31,15 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSearch, isLoading }
     <div className="mx-auto mb-12 max-w-4xl">
       <form onSubmit={handleSubmit} className="relative mb-8">
         <div className="relative">
-          <Textarea
+          <SearchTextarea
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
             placeholder="Describe what kind of game you're looking for... (e.g., 'I want a relaxing farming game' or 'Looking for a challenging platformer with great music')"
-            className="h-32 resize-none rounded-2xl px-6 py-4 text-lg transition-all duration-300"
             disabled={isLoading}
           />
-          <Button
+          <BrandButton
             type="submit"
             disabled={!prompt.trim() || isLoading}
-            variant="brand"
             className="absolute right-4 bottom-4 rounded-xl px-6 py-2"
           >
             {isLoading ? (
@@ -54,7 +53,7 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSearch, isLoading }
                 <span>Find Games</span>
               </div>
             )}
-          </Button>
+          </BrandButton>
         </div>
       </form>
 
@@ -62,16 +61,15 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSearch, isLoading }
         <p className="mb-4 text-muted-foreground">Try one of these examples:</p>
         <div className="flex flex-wrap justify-center gap-3">
           {examplePrompts.map((example, index) => (
-            <Button
+            <PillButton
               type="button"
-              variant="pill"
               key={index}
               onClick={() => setPrompt(example)}
               disabled={isLoading}
               className="h-9 px-4 text-sm font-medium"
             >
               {example}
-            </Button>
+            </PillButton>
           ))}
         </div>
       </div>

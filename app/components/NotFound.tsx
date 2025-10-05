@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/BrandButton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const NotFound = () => {
@@ -24,9 +24,9 @@ const NotFound = () => {
             <p>It might have been removed, renamed, or didn't exist in the first place.</p>
             <p>Let's get you back to exploring games.</p>
           </div>
-          <Button asChild variant="brand" className="rounded-xl">
+          <BrandButton asChild className="rounded-xl">
             <a href="/">Return to Home</a>
-          </Button>
+          </BrandButton>
         </CardContent>
       </Card>
     </div>

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -15,9 +15,6 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        brand:
-          'border-0 bg-gradient-to-r from-[var(--brand-gradient-from)] to-[var(--brand-gradient-to)] text-[var(--brand-foreground)] shadow-lg transition-transform hover:from-[var(--brand-gradient-from-hover)] hover:to-[var(--brand-gradient-to-hover)] hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60',
-        pill: 'rounded-full border border-[var(--secondary-border)] bg-[var(--secondary)] text-[var(--secondary-foreground)] backdrop-blur-md transition-transform duration-300 hover:border-[var(--border)] hover:bg-[var(--secondary-hover)] hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60',
       },
       size: {
         default: 'h-10 px-4 py-2',

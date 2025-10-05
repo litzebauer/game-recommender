@@ -1,14 +1,8 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/BrandButton';
 import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
+import { CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { FrostedCard } from '@/components/FrostedCard';
 import { Tag, Star } from 'lucide-react';
 import { GameRecommendation } from '../lib/schemas/gameRecommendation';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from './ui/tooltip';
@@ -43,7 +37,7 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
   const hasMoreTags = remainingTags.length > 0;
 
   return (
-    <Card className="group flex h-full flex-col overflow-hidden rounded-2xl border-border bg-card text-card-foreground backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+    <FrostedCard className="group flex h-full flex-col overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl">
       <div className="relative flex aspect-video items-center justify-center overflow-hidden">
         <img
           src={gameRecommendation.game.imageUrl ?? '/placeholder.svg'}
@@ -139,9 +133,8 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
           )}
         </div>
 
-        <Button
+        <BrandButton
           disabled={!gameRecommendation.game.link}
-          variant="brand"
           className="rounded-xl px-6"
           onClick={() => {
             if (gameRecommendation.game.link) {
@@ -150,9 +143,9 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
           }}
         >
           View Game
-        </Button>
+        </BrandButton>
       </CardFooter>
-    </Card>
+    </FrostedCard>
   );
 };
 
