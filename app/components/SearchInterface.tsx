@@ -34,13 +34,14 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSearch, isLoading }
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
             placeholder="Describe what kind of game you're looking for... (e.g., 'I want a relaxing farming game' or 'Looking for a challenging platformer with great music')"
-            className="h-32 resize-none rounded-2xl border-white/20 bg-white/10 px-6 py-4 text-lg text-white placeholder-gray-300 backdrop-blur-md transition-all duration-300 focus-visible:ring-2 focus-visible:ring-blue-500/80"
+            className="h-32 resize-none rounded-2xl px-6 py-4 text-lg transition-all duration-300"
             disabled={isLoading}
           />
           <Button
             type="submit"
             disabled={!prompt.trim() || isLoading}
-            className="absolute right-4 bottom-4 rounded-xl border-0 bg-gradient-to-r from-blue-600 to-teal-600 px-6 py-2 text-white shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+            variant="brand"
+            className="absolute right-4 bottom-4 rounded-xl px-6 py-2"
           >
             {isLoading ? (
               <div className="flex items-center space-x-2">
@@ -58,19 +59,18 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSearch, isLoading }
       </form>
 
       <div className="text-center">
-        <p className="mb-4 text-gray-300">Try one of these examples:</p>
+        <p className="mb-4 text-muted-foreground">Try one of these examples:</p>
         <div className="flex flex-wrap justify-center gap-3">
           {examplePrompts.map((example, index) => (
             <Button
               type="button"
-              variant="secondary"
-              size="sm"
+              variant="pill"
               key={index}
               onClick={() => setPrompt(example)}
               disabled={isLoading}
-              className="rounded-full border border-white/20 bg-white/5 text-gray-200 transition-all duration-300 hover:scale-105 hover:border-white/40 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+              className="h-9 px-4 text-sm font-medium"
             >
-              "{example}"
+              {example}
             </Button>
           ))}
         </div>

@@ -14,20 +14,20 @@ const GameRecommendationsLoading: React.FC = () => {
         {[...Array(MAX_RECOMMENDATIONS)].map((_, index) => (
           <Card
             key={index}
-            className="flex h-full animate-pulse flex-col gap-4 overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-md"
+            className="flex h-full animate-pulse flex-col gap-4 overflow-hidden rounded-2xl border-border bg-card p-6 text-card-foreground backdrop-blur-xl"
           >
-            <Skeleton className="aspect-video w-full rounded-xl bg-white/20" />
+            <Skeleton className="aspect-video w-full rounded-xl" />
             <CardContent className="flex flex-1 flex-col gap-4 p-0">
-              <Skeleton className="h-6 w-3/4 rounded bg-white/20" />
-              <Skeleton className="h-4 w-full rounded bg-white/15" />
-              <Skeleton className="h-4 w-5/6 rounded bg-white/15" />
+              <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
               <div className="flex gap-2">
                 {[...Array(3)].map((_, i) => (
-                  <Skeleton key={i} className="h-6 w-16 rounded-full bg-white/15" />
+                  <Skeleton key={i} className="h-6 w-16 rounded-full" />
                 ))}
               </div>
-              <Skeleton className="h-4 w-2/3 rounded bg-white/15" />
-              <Skeleton className="h-10 w-full rounded-xl bg-white/20" />
+              <Skeleton className="h-4 w-2/3" />
+              <Skeleton className="h-10 w-full rounded-xl" />
             </CardContent>
           </Card>
         ))}

@@ -43,7 +43,7 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
   const hasMoreTags = remainingTags.length > 0;
 
   return (
-    <Card className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/20 bg-white/10 text-white backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/15 hover:shadow-2xl">
+    <Card className="group flex h-full flex-col overflow-hidden rounded-2xl border-border bg-card text-card-foreground backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl">
       <div className="relative flex aspect-video items-center justify-center overflow-hidden">
         <img
           src={gameRecommendation.game.imageUrl ?? '/placeholder.svg'}
@@ -58,10 +58,10 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
       </div>
 
       <CardHeader className="space-y-2 pb-4">
-        <CardTitle className="text-xl font-bold text-white transition-colors group-hover:text-blue-200">
+        <CardTitle className="text-xl font-bold transition-colors group-hover:text-primary/80">
           {gameRecommendation.game.name}
         </CardTitle>
-        <CardDescription className="line-clamp-3 text-sm text-gray-200">
+        <CardDescription className="line-clamp-3 text-sm">
           {gameRecommendation.game.description}
         </CardDescription>
       </CardHeader>
@@ -79,7 +79,7 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
               <TooltipTrigger asChild>
                 <Badge
                   variant="outline"
-                  className="cursor-default border-white/30 bg-slate-700/30 text-gray-200 hover:bg-slate-700/40"
+                  className="cursor-default border-[var(--secondary-border)] bg-[var(--surface-muted)]"
                 >
                   +{tags.length - MAX_VISIBLE_TAGS} More
                 </Badge>
@@ -106,10 +106,10 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
           )}
         </div>
 
-        <div className="rounded-xl border border-teal-500/30 bg-teal-600/20 p-3">
+        <div className="rounded-xl border border-[var(--secondary-border)] bg-[var(--secondary)] p-3 backdrop-blur-md">
           <div className="flex items-start space-x-2">
             <Star size={16} className="mt-0.5 flex-shrink-0 text-yellow-400" />
-            <p className="text-sm text-teal-100">
+            <p className="text-sm text-[var(--secondary-foreground)]">
               <span className="font-semibold">Why recommended:</span> {gameRecommendation.reasoning}
             </p>
           </div>
@@ -117,14 +117,14 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
       </CardContent>
 
       <CardFooter className="flex items-center justify-between pt-0">
-        <div className="text-right">
+        <div className="text-right text-card-foreground">
           {gameRecommendation.game.discount && gameRecommendation.game.originalPrice ? (
             <div className="space-y-1">
               <div className="flex items-center justify-end space-x-2">
                 <span className="rounded-full bg-green-600/90 px-2 py-1 text-xs font-bold text-white">
                   -{gameRecommendation.game.discount}%
                 </span>
-                <span className="text-sm text-gray-300 line-through">
+                <span className="text-sm text-muted-foreground line-through">
                   {formatPrice(gameRecommendation.game.originalPrice)}
                 </span>
               </div>
@@ -133,7 +133,7 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
               </div>
             </div>
           ) : (
-            <div className="text-2xl font-bold text-white">
+            <div className="text-2xl font-bold">
               {formatPrice(gameRecommendation.game.currentPrice)}
             </div>
           )}
@@ -141,7 +141,8 @@ const GameCard: React.FC<GameCardProps> = ({ gameRecommendation }) => {
 
         <Button
           disabled={!gameRecommendation.game.link}
-          className="rounded-xl border-0 bg-gradient-to-r from-blue-600 to-teal-600 px-6 text-white transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+          variant="brand"
+          className="rounded-xl px-6"
           onClick={() => {
             if (gameRecommendation.game.link) {
               window.open(gameRecommendation.game.link, '_blank');
