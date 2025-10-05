@@ -1,4 +1,6 @@
 import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const MAX_RECOMMENDATIONS = 6;
 
@@ -10,22 +12,24 @@ const GameRecommendationsLoading: React.FC = () => {
       </h2>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {[...Array(MAX_RECOMMENDATIONS)].map((_, index) => (
-          <div
+          <Card
             key={index}
-            className="animate-pulse rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-md"
+            className="flex h-full animate-pulse flex-col gap-4 overflow-hidden rounded-2xl border-border bg-card p-6 text-card-foreground backdrop-blur-xl"
           >
-            <div className="mb-4 aspect-video rounded-xl bg-white/20"></div>
-            <div className="mb-3 h-6 rounded bg-white/20"></div>
-            <div className="mb-2 h-4 rounded bg-white/20"></div>
-            <div className="mb-4 h-4 w-3/4 rounded bg-white/20"></div>
-            <div className="mb-4 flex space-x-2">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-6 w-16 rounded-full bg-white/20"></div>
-              ))}
-            </div>
-            <div className="mb-4 h-4 rounded bg-white/20"></div>
-            <div className="h-10 rounded-xl bg-white/20"></div>
-          </div>
+            <Skeleton className="aspect-video w-full rounded-xl" />
+            <CardContent className="flex flex-1 flex-col gap-4 p-0">
+              <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+              <div className="flex gap-2">
+                {[...Array(3)].map((_, i) => (
+                  <Skeleton key={i} className="h-6 w-16 rounded-full" />
+                ))}
+              </div>
+              <Skeleton className="h-4 w-2/3" />
+              <Skeleton className="h-10 w-full rounded-xl" />
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>
